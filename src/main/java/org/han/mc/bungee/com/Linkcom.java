@@ -10,9 +10,9 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class Linkcom extends Command {
 
-	public static final String permission = "DBcord.link";
+	public static final String permission = "DisBun.link";
 	public Linkcom() {
-		super("link", permission, new String[] { "DBcord:link", "DB:Link", "DiscordLink" });
+		super("link", permission, new String[] { "DisBun:link", "DB:Link", "DiscordLink" });
 		// TODO Auto-generated constructor stub
 	}
 
@@ -29,7 +29,7 @@ public class Linkcom extends Command {
 		
 		try {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
-			String send = BPlugin.RelinkText(player);
+			String send = BPlugin.RelinkText(player, "").trim();
 
 			sender.sendMessage(new ComponentBuilder(send).create());
 		} catch (ClassCastException e) {

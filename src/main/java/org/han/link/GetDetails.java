@@ -20,37 +20,9 @@ public class GetDetails {
 			throw new IllegalStateException("Serv Value not enitialize properly");
 		}
 	}
-/*
-	private static void INIT() {
-		File F = FileObj.Fetch("", "ServerID", "txt");
-		if (F.exists()) {
-			try {
-				ServID = FileObj.read(F)[2].split(":")[1].trim();
-				return;
-			} catch (ArrayIndexOutOfBoundsException e) {
-				Debug.out("File format exception. rewriting it");
-			} catch (FileNotFoundException e) {
-				Debug.Trace(e);
-			} catch (IOException e) {
-				Debug.Trace(e);
-			}
-		}
-		Write("server ID here");
-	}
-*/
+
 	static public boolean Write(String value) {
 		return BPlugin.Config.SetServID(value);
-		
-		
-		
-		//File F = FileObj.Fetch("", "ServerID", "txt");
-		///try {
-		//	FileObj.writeNF(new String[] { "//Server ID. This can be linked in discord by running the setup command",
-		//			"//Don't edit the file structure of this file", "ServID:" + value }, F, "Serv settings");
-		//} catch (IOException e) {
-		//	// TODO Auto-generated catch block
-		//	Debug.Trace(e);
-		//}
 	}
 
 }

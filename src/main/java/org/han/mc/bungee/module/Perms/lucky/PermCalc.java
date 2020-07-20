@@ -41,7 +41,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 	// final static String HEADER = "dbcon:";
-	static String KEY = "dbcon:";
+	static String KEY = "disbun:";
 	static String LINK = KEY + "link";
 	static String MEMBER = KEY + "member";
 	static String ROLE = KEY + "role";
@@ -60,16 +60,16 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		deload();
 		if (BPlugin.Config.LPEnabled() && BotCon.isRunning()) {
 			try {
-				Debug.out("Trying to load Luckperms intergration");
+				Debug.rep("Trying to load Luckperms intergration");
 				LuckPerms api = LuckPermsProvider.get();
 				self = new PermCalc();
 				api.getContextManager().registerCalculator(self);
 				endabled = true;
 				ReSyncGroup();
-				Debug.out("Luckperms Sync check will run every: " + BPlugin.Config.LPRefresh() + " minutes");
+				Debug.rep("Luckperms Sync check will run every: " + BPlugin.Config.LPRefresh() + " minutes");
 				Timer timer = new Timer();
 				timer.schedule(new AutoUpdate(), 60000, BPlugin.Config.LPRefresh() * 60000);
-				Debug.out("Successfully loaded Luckperms intergration");
+				Debug.rep("Successfully loaded Luckperms intergration");
 
 			} catch (Exception e) {
 				Debug.out("Unable to load Luckperm integration");
@@ -95,7 +95,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 	public static String ReSyncGroup() {
 		if (!endabled)
 			return "Luckperm module isn't running";
-		Debug.out("Starting Luckperms resync operation");
+		Debug.rep("Starting Luckperms resync operation");
 		File[] L = FileObj.FileList("DB/", "json");
 		LuckPerms api = LuckPermsProvider.get();
 		Guild Srv = null;
@@ -111,6 +111,17 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		}
 		String out = "```";
 		int i = 1;
+		if (L == null || L.length < 1) {
+			api.getGroupManager().getLoadedGroups().forEach(f->{
+				if (f.getName().startsWith(KEY)) {
+					api.getGroupManager().deleteGroup(f);
+					api.getGroupManager().saveGroup(f);
+				}
+			});
+			
+			Debug.rep("Nothing to sync");
+			return "```Nothing to sync```";
+		}
 		for (File file : L) {
 			Debug.rep("Scanning : " + i++ + "/" + L.length);
 			try {
@@ -139,7 +150,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 			}
 
 		}
-		Debug.out("Done with Luckperms resync operation");
+		Debug.rep("Done with Luckperms resync operation");
 		return out + "```";
 	}
 
@@ -196,7 +207,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 
 			for (UUID uuid : tmp) {
 				all: {
-					Debug.out("Scanning : " + i + "/" + tmp.size());
+					Debug.rep("Scanning : " + i + "/" + tmp.size());
 					i++;
 					LuckPerms api = LuckPermsProvider.get();
 
@@ -264,7 +275,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		}
 		if (mem == null) {
 			consumer.accept(PermCalc.MEMBER, "false");
-			Debug.out("player not a member");
+			Debug.rep("player not a member");
 			// PermCalc.Catch.put(UUID, Temp);
 			return;
 		}
@@ -277,7 +288,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 
 	@Override
 	public ContextSet estimatePotentialContexts() {
-		Debug.out("estimatePotentialContexts");
+		Debug.rep("estimating Potential Contexts");
 		ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
 		try {
 			builder.add(LINK, "true");

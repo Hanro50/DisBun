@@ -18,10 +18,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 public class UnLinkcom extends Command {
-	public static final String permission = "DBcord.unlink";
+	public static final String permission = "DisBun.unlink";
 
 	public UnLinkcom() {
-		super("unlink", permission, new String[] { "DBcord:unlink", "DB:Unlink", "DiscordUnlink" });
+		super("unlink", permission, new String[] { "DisBun:unlink", "DB:Unlink", "DiscordUnlink" });
 		// TODO Auto-generated constructor stub
 	}
 

@@ -38,6 +38,7 @@ public class GroupObj {
 		Group T = api.getGroupManager().getGroup(Name);
 		if (T != null) {
 			api.getGroupManager().deleteGroup(T);
+			api.getGroupManager().saveGroup(T);
 		}
 	}
 

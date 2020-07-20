@@ -91,20 +91,7 @@ public interface TextMsg {
 	public static class Container {
 		@Expose
 		DiMultiMap<String, Long> Data;
-		// Map<String, String> CHLtoSRV;
-		// Map<String, String> SRVtoCHL;
 		static Container self;
-
-		/*
-		 * private void innit() { if (SRVtoCHL == null) { SRVtoCHL = new
-		 * HashedMap<String, String>(); }
-		 * 
-		 * SRVtoCHL.clear();
-		 * 
-		 * Set<String> T = CHLtoSRV.keySet(); List<String> F = new ArrayList<String>();
-		 * F.addAll(T); Debug.out("Loaded Linked channels"+F.size()); for (String str :
-		 * F) { SRVtoCHL.put(CHLtoSRV.get(str), str); } }
-		 */
 
 		private Container() {
 			Data = new DiMultiMap<String, Long>();

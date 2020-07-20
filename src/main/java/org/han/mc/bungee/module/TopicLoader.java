@@ -19,7 +19,7 @@ public class TopicLoader {
 		deload();
 		if (BPlugin.Config.isTUDisabled())
 			return;
-		Debug.out("Loadind Topic changer");
+		Debug.rep("Loadind Topic changer");
 		timer = new Timer();
 		timer.schedule(new AutoUpdate(), 10000, BPlugin.Config.ServerTopicUpdate() * 60000);
 		enabled = true;
@@ -46,6 +46,7 @@ public class TopicLoader {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
+			Debug.rep("Updating channel topics");
 			TextMsg.getchannels().forEach(channelID -> {
 				String out = "";
 				for (String Serv : TextMsg.GetServ(channelID)) {

@@ -17,21 +17,22 @@ public class LinkUp {
 	public static String GetDiscordID(UUID UUID) {
 		return DATA.Load().LinkData.Getkey1(UUID);
 	}
-	
-	public static List<UUID> UUIDList(){
+
+	public static List<UUID> UUIDList() {
 		return DATA.Load().LinkData.getlistk2();
 	}
-	
+
 	public static UUID GetUUID(String DiscordID) {
 		return DATA.Load().LinkData.Getkey2(DiscordID);
 	}
+
 	public static void LinkAcc(String DiscordID, UUID UUID) {
 		DATA T = DATA.Load();
 		T.LinkData.add(DiscordID, UUID);
 		T.Save();
 		PermCalc.RoleUpdate(UUID);
 	}
-	
+
 	public static void Remove(UUID UUID) {
 		DATA T = DATA.Load();
 		T.LinkData.removeKey2(UUID);
@@ -41,7 +42,6 @@ public class LinkUp {
 	static class DATA {
 		@Expose
 		DiMap<String, UUID> LinkData;
-	
 
 		public DATA() {
 			LinkData = new DiMap<String, UUID>();
@@ -80,15 +80,12 @@ public class LinkUp {
 			}
 		}
 	}
-	
-	public static boolean isforcedlink(String ServName) {
-		if (BPlugin.Config.isForceLink()) return true;
-		return BPlugin.ServConfig.isforcedlink(ServName);
-		
-		
-		
-	}
 
-	// static islinked()
+	public static boolean isforcedlink(String ServName) {
+		if (BPlugin.Config.isForceLink())
+			return true;
+		return BPlugin.ServConfig.isforcedlink(ServName);
+
+	}
 
 }

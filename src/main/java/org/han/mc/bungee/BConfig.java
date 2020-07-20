@@ -36,7 +36,7 @@ public class BConfig extends AbsConfig {
 
 		Register("The Bot Token for the bot", BotToken, "Insert token here");
 		Register("The main Linked Discord Server\nThis can be added automatically within discord", ServID, "ServerID");
-		Register("Debug Mode", DB, "true");
+		Register("Debug Mode", DB, "false");
 		Register("Luckperm:\nLuck perms module", LP, "true");
 		Register("Luckperm:\nUpdate sync in minutes", LPUT, "5");
 

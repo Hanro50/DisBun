@@ -34,10 +34,6 @@ public class BPlugin extends Plugin {
 
 		Config = new BConfig();
 
-		
-	
-		
-		
 		Debug.out(Config.GetToken());
 
 		BotCon.Start();
@@ -54,15 +50,20 @@ public class BPlugin extends Plugin {
 	}
 
 	public static String RelinkText(ProxiedPlayer player) {
-		return (player.hasPermission(Linkcom.permission) || !Config.isPermcheck() ? ChatColor.RED + "\nDM "
+		return RelinkText(player, "\n");
+	}
+
+	public static String RelinkText(ProxiedPlayer player, String leading) {
+		return (player.hasPermission(Linkcom.permission) || !Config.isPermcheck() ? ChatColor.RED + leading + "DM "
 				+ BotCon.getJDA().getSelfUser().getName() + " the following message<" + ChatColor.WHITE
 				+ LinkPrep.Primer(player.getUniqueId()) + ChatColor.RED + "> to link your account" : "");
 	}
 
 	public static void reloadConfig() {
-		Debug.out("Loading Config:");
+		Debug.out("Loading:");
 		Config = new BConfig();
 		ServConfig = new BServerConfig(getproxyserv().getServers().keySet());
+		Debug.Debug = Config.DebugMode();
 		SrvrunAsync(new Runnable() {
 			@Override
 			public void run() {
@@ -81,19 +82,21 @@ public class BPlugin extends Plugin {
 					});
 
 				}
+
+				BotCon.Start();
+
 				if (BotCon.isRunning()) {
-					Debug.out("Reloading luckperms");
 					PermCalc.load();
 					TopicLoader.load();
 				}
 				if (Config.isGlobal()) {
-					Debug.out("Chat format sync pulse being sent out");
+					Debug.rep("Chat format sync pulse being sent out");
 					getproxyserv().getServers().keySet().forEach(Fserv -> {
 						Events.ConfigUpdate(getproxyserv().getServers().get(Fserv));
 						Debug.rep("Notified: " + Fserv);
 					});
 				}
-				Debug.out("Done loading configs");
+				Debug.rep("Done loading");
 			}
 		});
 	}
@@ -108,17 +111,18 @@ public class BPlugin extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, new Linkcom());
 		getProxy().getPluginManager().registerCommand(this, new UnLinkcom());
 		getProxy().getPluginManager().registerCommand(this, new Reloadcom());
-		FileObj.Init(getProxy().getPluginsFolder());
+		getProxy().getPluginManager().registerCommand(this, new InfoCom());
+		FileObj.Init(getProxy().getPluginsFolder(), getDataFolder().getName());
 		Debug.Override = getLogger();
-		Debug.out("Stating up: Hello world!");
+		
 		Debug.out("Plugin File : " + FileObj.ClassPath);
 		reloadConfig();
-		Debug.Debug = Config.DebugMode();
-		BotCon.Start();
 
-		PermCalc.load();
-		TopicLoader.load();
-		Debug.out("Fully loaded");
+		// BotCon.Start();
+
+		// PermCalc.load();
+		// TopicLoader.load();
+		//Debug.out("Fully loaded");
 	}
 
 	@Override

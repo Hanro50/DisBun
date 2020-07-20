@@ -21,6 +21,7 @@ import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
+import net.md_5.bungee.api.event.ProxyReloadEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -66,6 +67,11 @@ public class Events implements Listener {
 
 	}
 
+	@EventHandler 
+	public void onProxyReloadEvent(ProxyReloadEvent event) {
+		BPlugin.reloadConfig();
+	}
+	
 	@EventHandler
 	public void onServerSwitchEvent(ServerSwitchEvent event) {
 		if (event.getFrom() != null) {

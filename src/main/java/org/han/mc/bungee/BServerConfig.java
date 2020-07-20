@@ -22,7 +22,7 @@ public class BServerConfig extends AbsConfig {
 					ServName+"."+ServerTopic, "%PlayerCount% player(s) are currently playing on %ServName%");
 		});
 		
-		Debug.out("Done with server specific config");
+		Debug.rep("Done with server specific config");
 	}
 	
 	public boolean isforcedlink(String ServName) {

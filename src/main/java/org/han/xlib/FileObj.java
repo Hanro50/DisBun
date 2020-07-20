@@ -47,11 +47,10 @@ public class FileObj {
 	 * @param Pfile
 	 */
 
-	public static void Init(File Pfile) {
+	public static void Init(File Pfile, String Path) {
 		Root = Pfile.getName();
-		ClassPath = Pfile.getName() + "/DBcon/";
+		ClassPath = Pfile.getName() + "/"+Path+"/";
 		FileChk("");
-
 	}
 
 	/**

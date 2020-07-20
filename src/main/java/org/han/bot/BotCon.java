@@ -49,9 +49,11 @@ public class BotCon {
 
 	public synchronized static void Start() {
 		String Token = BPlugin.Config.GetToken();
-
+		if (isRunning()) Stop();
+		
 		try {
 			jda = JDABuilder.createDefault(Token).addEventListeners(new JDAListener()).build();
+			out("Starting bot");
 			// out("Can't redirect JDA errors. Just ignore JDA's complaining");
 			try {
 				jda.awaitReady();
@@ -71,16 +73,14 @@ public class BotCon {
 		} catch (LoginException | IllegalArgumentException e) {
 			err("INVALID DISCORD TOKEN");
 			err("Please update Token in config options");
-			err("");
-
-			// Trace(e);
-
+			err("and then reload (/dbreload)");
 		}
 	}
 
 	public synchronized static void Stop() {
 		try {
 			if (isRunning()) {
+				out("Stopping bot");
 				jda.shutdownNow();
 			}
 		} finally {

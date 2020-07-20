@@ -57,7 +57,6 @@ public class JDAListener extends ListenerAdapter {
 		if (m.Sender.Member.getRoles().size() > 0) {
 			Role R = m.Sender.Member.getRoles().get(0);
 			role = new RoleObj(R.getName(), "#"+ Integer.toHexString(R.getColor().getRGB()).substring( 2 ));
-			Debug.out(Integer.toHexString(R.getColor().getRGB()));
 		} else {
 			role = new RoleObj("", "#FFFFFF");
 		}
