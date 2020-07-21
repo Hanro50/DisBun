@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -112,13 +110,13 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		String out = "```";
 		int i = 1;
 		if (L == null || L.length < 1) {
-			api.getGroupManager().getLoadedGroups().forEach(f->{
+			api.getGroupManager().getLoadedGroups().forEach(f -> {
 				if (f.getName().startsWith(KEY)) {
 					api.getGroupManager().deleteGroup(f);
 					api.getGroupManager().saveGroup(f);
 				}
 			});
-			
+
 			Debug.rep("Nothing to sync");
 			return "```Nothing to sync```";
 		}
@@ -188,71 +186,151 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		// Updateobj.Do(UUID);
 	}
 
+	public static void UpdatePerms(ProxiedPlayer player) {
+		if (!endabled)
+			return;
+		try {
+			Member mem = GetDetails.getGuild().retrieveMemberById(LinkUp.GetDiscordID(player.getUniqueId())).complete();
+			if (mem == null)
+				return;
+
+			LuckPerms api = LuckPermsProvider.get();
+			List<String> roles = new ArrayList<String>();
+
+			for (Role MemRole : mem.getRoles()) {
+				try {
+					roles.add(GroupObj.Load(MemRole.getId()).Name);
+				} catch (IOException e) {
+				}
+			}
+			// User user = api.getUserManager().getUser(player.getUniqueId());
+			api.getGroupManager().loadAllGroups().get();
+			User user = api.getPlayerAdapter(ProxiedPlayer.class).getUser(player);
+			user.data().clear(t->{
+				if (t instanceof InheritanceNode) {
+					return ((InheritanceNode) t).getGroupName().startsWith(KEY);
+				}
+				return false; 
+			});
+			for (Group Group : api.getGroupManager().getLoadedGroups()) {
+				Debug.rep("scanning:" + Group.getName());
+				if (Group.getName().startsWith(KEY)) {
+					Debug.rep("checking:" + Group.getName());
+					if (player.hasPermission("group." + Group)) {
+						Debug.rep("user has perm");
+
+						if (!roles.contains(Group.getName())) {
+							if (user.getNodes(NodeType.INHERITANCE).contains(InheritanceNode.builder(Group).build())) {
+								user.data().add(InheritanceNode.builder(Group).value(false).build());
+								Debug.rep("removing:" + Group);
+							}
+						} else {
+							if (!user.getNodes(NodeType.INHERITANCE).contains(InheritanceNode.builder(Group).build())) {
+								// user.getNodes(NodeType.INHERITANCE).add();
+								user.data().add(InheritanceNode.builder(Group).value(true).build());
+								Debug.rep("adding:" + Group.getName());
+							}
+						}
+					} else {
+						Debug.rep("user does not have perm");
+						if (roles.contains(Group.getName())) {
+							if (!user.getNodes(NodeType.INHERITANCE).contains(InheritanceNode.builder(Group).build())) {
+								// user.getNodes(NodeType.INHERITANCE).add();
+								user.data().add(InheritanceNode.builder(Group).value(true).build());
+								Debug.rep("adding:" + Group.getName());
+							}
+						} else {
+							if (user.getNodes(NodeType.INHERITANCE).contains(InheritanceNode.builder(Group).build())) {
+								user.data().add(InheritanceNode.builder(Group).value(false).build());
+								// .add(InheritanceNode.builder(Group).expiry(1, TimeUnit.NANOSECONDS).build());
+								// user.getNodes(NodeType.INHERITANCE).remove(InheritanceNode.builder(Group).build());
+								Debug.rep("removing:" + Group.getName());
+							}
+						}
+					}
+					api.getUserManager().saveUser(user).get();
+				}
+			}
+
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// player.hasPermission(permission);
+	}
+
 	static public class AutoUpdate extends TimerTask {
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			Debug.rep("Syncing Discord and Luckperms groups");
+			BPlugin.getproxyserv().getPlayers().forEach(player -> {
+				if (LinkUp.GetDiscordID(player.getUniqueId()) != null) {
+					UpdatePerms(player);
+				}
+			});
 
 			// tmp.addAll();
-			List<UUID> tmp = new ArrayList<UUID>();
-			for (UUID uuid : LinkUp.UUIDList()) {
-				if (BPlugin.getproxyserv().getPlayer(uuid) != null) {
-					tmp.add(uuid);
-				}
-			}
+			// List<UUID> tmp = new ArrayList<UUID>();
+			// for (UUID uuid : LinkUp.UUIDList()) {
+			// if (BPlugin.getproxyserv().getPlayer(uuid) != null) {
+			// tmp.add(uuid);
+			// }
+			// }
 
-			int i = 1;
-
-			for (UUID uuid : tmp) {
-				all: {
-					Debug.rep("Scanning : " + i + "/" + tmp.size());
-					i++;
-					LuckPerms api = LuckPermsProvider.get();
-
-					User U = api.getUserManager().getUser(uuid);
-					if (U == null) {
-						try {
-							U = api.getUserManager().loadUser(uuid).get();
-						} catch (InterruptedException | ExecutionException e) {
-							// TODO Auto-generated catch block
-							Debug.Trace(e);
-							break all;
-						}
-					}
-
-					if (U == null) {
-						break all;
-					}
-
-					final User FU = U;
-					Set<String> Fset = new HashSet<String>();
-					FU.getNodes(NodeType.INHERITANCE).forEach(F -> {
-						if (F.getGroupName().startsWith(KEY)) {
-							if (Fset.contains(F.getGroupName())) {
-								Fset.remove(F.getGroupName());
-							} else {
-								F.toBuilder().value(false).build();
-							}
-						}
-					});
-
-					Fset.forEach(T -> {
-						InheritanceNode node = InheritanceNode.builder(T).build();
-						FU.data().add(node);
-					});
-					api.getUserManager().saveUser(FU);
-
-				}
-			}
-
+			// int i = 1;
+			/*
+			 * for (UUID uuid : tmp) { all: { try { Debug.rep("Scanning : " + i + "/" +
+			 * tmp.size()); i++; LuckPerms api = LuckPermsProvider.get();
+			 * 
+			 * User U = api.getUserManager().getUser(uuid); if (U == null) { try { U =
+			 * api.getUserManager().loadUser(uuid).get(); } catch (InterruptedException |
+			 * ExecutionException e) { // TODO Auto-generated catch block Debug.Trace(e);
+			 * break all; } }
+			 * 
+			 * if (U == null) { Debug.wrn("nullpointer avoided"); break all; }
+			 * 
+			 * api.getGroupManager().loadAllGroups().get();
+			 * 
+			 * api.getGroupManager().getLoadedGroups().forEach(Group ->{ if
+			 * (Group.getName().startsWith(KEY)) {
+			 * 
+			 * } });
+			 * 
+			 * 
+			 * 
+			 * /* final User FinalUser = U; Set<String> Fset = new HashSet<String>();
+			 * FinalUser.getNodes(NodeType.INHERITANCE).forEach(F -> { if
+			 * (F.getGroupName().startsWith(KEY)) {
+			 * 
+			 * if (Fset.contains(F.getGroupName())) {
+			 * 
+			 * F.toBuilder().value(true).build(); Fset.remove(F.getGroupName()); } else {
+			 * F.toBuilder().value(false).build(); } } });
+			 * 
+			 * Fset.forEach(T -> { InheritanceNode node =
+			 * InheritanceNode.builder(T).value(true).build(); FinalUser.data().add(node);
+			 * });
+			 *//*
+				 * 
+				 * //api.getUserManager().saveUser(FinalUser).get(); } catch
+				 * (InterruptedException e) { // TODO Auto-generated catch block
+				 * Debug.wrn("Sync Interrupted"); } catch (ExecutionException e) { // TODO
+				 * Auto-generated catch block Debug.Trace(e); }
+				 * 
+				 * } }
+				 */
 		}
+
 	}
 
 	@Override
 	public void calculate(ProxiedPlayer target, ContextConsumer consumer) {
 		// MutableContextSet Temp = MutableContextSet.create();
+		if (!BotCon.isRunning())
+			return;
 		String ID = LinkUp.GetDiscordID(target.getUniqueId());
 		Guild T = GetDetails.getGuild();
 		if (ID == null || T == null) {
@@ -288,6 +366,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 
 	@Override
 	public ContextSet estimatePotentialContexts() {
+
 		Debug.rep("estimating Potential Contexts");
 		ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
 		try {
@@ -295,10 +374,12 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 			builder.add(LINK, "false");
 			builder.add(MEMBER, "true");
 			builder.add(MEMBER, "false");
-			Guild T = GetDetails.getGuild();
-			List<Role> F = T.getRoles();
-			for (Role role : F) {
-				builder.add(ROLE, role.getName());
+			if (BotCon.isRunning()) {
+				Guild T = GetDetails.getGuild();
+				List<Role> F = T.getRoles();
+				for (Role role : F) {
+					builder.add(ROLE, role.getName());
+				}
 			}
 		} catch (IllegalStateException | NullPointerException e) {
 			Debug.Trace(e);

@@ -1,5 +1,6 @@
 package org.han.bot;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -54,11 +55,22 @@ public class JDAListener extends ListenerAdapter {
 		}
 		String botwriter = event.getAuthor().getId().equals("147677951683461120") ? "§6" : "";
 		RoleObj role = null;
+		Color color = null;
 		if (m.Sender.Member.getRoles().size() > 0) {
-			Role R = m.Sender.Member.getRoles().get(0);
-			role = new RoleObj(R.getName(), "#"+ Integer.toHexString(R.getColor().getRGB()).substring( 2 ));
+			for (Role Role : m.Sender.Member.getRoles()) {
+				if (Role.getColor() != null) {
+					color = Role.getColor();
+					break;
+				}
+			}
+			if (color == null) {
+				color = Color.white;
+			}
+
+			role = new RoleObj(m.Sender.Member.getRoles().get(0).getName(),
+					"#" + Integer.toHexString(color.getRGB()).substring(2));
 		} else {
-			role = new RoleObj("", "#FFFFFF");
+			role = new RoleObj("", "#" + Integer.toHexString(Color.white.getRGB()).substring(2));
 		}
 
 		T.sendfromJDA(m.Channel.getIdLong(), m.Sender.Member.getEffectiveName(), m.Sender.User.getId(),

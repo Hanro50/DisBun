@@ -81,6 +81,7 @@ public class BotCon {
 		try {
 			if (isRunning()) {
 				out("Stopping bot");
+				Running = false;
 				jda.shutdownNow();
 			}
 		} finally {

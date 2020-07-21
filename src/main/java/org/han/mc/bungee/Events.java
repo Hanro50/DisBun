@@ -7,6 +7,7 @@ import org.han.bot.JDAIN;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.module.JoinMessages;
+import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.xlib.Debug;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -49,10 +50,12 @@ public class Events implements Listener {
 		}
 		if (!event.isCancelled() && event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
 			JoinMessages.networkjoin(event.getTarget(), player);
+			PermCalc.UpdatePerms(player);
 
 		}
 		else if (!event.isCancelled() ){
 			JoinMessages.serverjoin(event.getTarget(), player);
+			PermCalc.UpdatePerms(player);
 		}
 		// BPlugin.SrvrunAsync(new Runnable() {
 		// @Override

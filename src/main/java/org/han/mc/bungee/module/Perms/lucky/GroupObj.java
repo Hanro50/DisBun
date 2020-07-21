@@ -15,7 +15,7 @@ import net.luckperms.api.model.group.Group;
 
 public class GroupObj {
 	@Expose
-	String Name;
+	public String Name;
 	@Expose
 	String ID;
 	GroupObj(String Name, String ID) {
