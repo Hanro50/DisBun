@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.han.bot.BotCon;
@@ -190,7 +191,10 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		if (!endabled)
 			return;
 		try {
-			Member mem = GetDetails.getGuild().retrieveMemberById(LinkUp.GetDiscordID(player.getUniqueId())).complete();
+			String ID = LinkUp.GetDiscordID(player.getUniqueId());
+			if (ID == null)
+				return;
+			Member mem = GetDetails.getGuild().retrieveMemberById(ID).complete();
 			if (mem == null)
 				return;
 
@@ -206,11 +210,11 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 			// User user = api.getUserManager().getUser(player.getUniqueId());
 			api.getGroupManager().loadAllGroups().get();
 			User user = api.getPlayerAdapter(ProxiedPlayer.class).getUser(player);
-			user.data().clear(t->{
+			user.data().clear(t -> {
 				if (t instanceof InheritanceNode) {
 					return ((InheritanceNode) t).getGroupName().startsWith(KEY);
 				}
-				return false; 
+				return false;
 			});
 			for (Group Group : api.getGroupManager().getLoadedGroups()) {
 				Debug.rep("scanning:" + Group.getName());
@@ -329,39 +333,42 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 	@Override
 	public void calculate(ProxiedPlayer target, ContextConsumer consumer) {
 		// MutableContextSet Temp = MutableContextSet.create();
-		if (!BotCon.isRunning())
-			return;
-		String ID = LinkUp.GetDiscordID(target.getUniqueId());
-		Guild T = GetDetails.getGuild();
-		if (ID == null || T == null) {
-			consumer.accept(PermCalc.LINK, "false");
-			consumer.accept(PermCalc.MEMBER, "false");
-			// Debug.out("player not linked");
-			// PermCalc.Catch.put(UUID, Temp);
-			return;
+		if (BotCon.isRunning()) {
+			try {
+				String ID = LinkUp.GetDiscordID(target.getUniqueId());
+				Guild T = GetDetails.getGuild();
+				if (ID == null || T == null) {
+					consumer.accept(PermCalc.LINK, "false");
+					consumer.accept(PermCalc.MEMBER, "false");
+					// Debug.out("player not linked");
+					// PermCalc.Catch.put(UUID, Temp);
+					return;
 
+				}
+				consumer.accept(PermCalc.LINK, "true");
+				Member mem = null;
+				try {
+					// mem = T.retrieveMemberById(ID, false).complete(); // Get cached version
+					mem = T.retrieveMemberById(ID).complete();
+					// Debug.out("Discord takes a while to respond. Context calculations take a
+					// while as a result");
+					// Update it.
+				} catch (ErrorResponseException E) {
+				}
+				if (mem == null) {
+					consumer.accept(PermCalc.MEMBER, "false");
+					Debug.rep("player not a member");
+					// PermCalc.Catch.put(UUID, Temp);
+					return;
+				}
+				consumer.accept(MEMBER, "true");
+				for (Role role : mem.getRoles()) {
+					consumer.accept(PermCalc.ROLE, role.getName().toLowerCase());
+				}
+			} catch (RejectedExecutionException e) {
+				Debug.err("This should not be executing...why is this being executed luckperms?!");
+			}
 		}
-		consumer.accept(PermCalc.LINK, "true");
-		Member mem = null;
-		try {
-			// mem = T.retrieveMemberById(ID, false).complete(); // Get cached version
-			mem = T.retrieveMemberById(ID).complete();
-			// Debug.out("Discord takes a while to respond. Context calculations take a
-			// while as a result");
-			// Update it.
-		} catch (ErrorResponseException E) {
-		}
-		if (mem == null) {
-			consumer.accept(PermCalc.MEMBER, "false");
-			Debug.rep("player not a member");
-			// PermCalc.Catch.put(UUID, Temp);
-			return;
-		}
-		consumer.accept(MEMBER, "true");
-		for (Role role : mem.getRoles()) {
-			consumer.accept(PermCalc.ROLE, role.getName().toLowerCase());
-		}
-
 	}
 
 	@Override

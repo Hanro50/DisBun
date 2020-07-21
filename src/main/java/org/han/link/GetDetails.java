@@ -7,6 +7,10 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class GetDetails {
 	static Guild Temp;
+	public static void reset() {
+		Temp = null;
+	}
+	
 	public static Guild getGuild() throws IllegalStateException {
 		if (Temp != null && Temp.getId().equals(BPlugin.Config.GetServID())) return Temp;
 		try {

@@ -26,9 +26,12 @@ public class BConfig extends AbsConfig {
 	static final String Utopicglobal = "TopicType";
 	static final String ServerTopic = "ServerTopicFormat";
 	static final String ServerTopicUpdate = "ServerTopicUpdate";
-	
+
 	static final String Networkjoin = "Networkjoin";
 	static final String Serverjoin = "Serverjoin";
+
+	static final String Placeholdersenabled = "enabled_Placeholders";
+	static final String placeholdersUpdate = "placeholdersUpdate";
 
 //§ "§9[§1Discord§9] §f: "
 	public BConfig() {
@@ -72,11 +75,14 @@ public class BConfig extends AbsConfig {
 				ServerTopic, "%PlayerCount% player(s) are currently playing on %ServName%");
 
 		Register("Topic Update timer in minutes", ServerTopicUpdate, "11");
-		
-		Register("Show a network join", Networkjoin, "true"); 
-		
-		Register("Show a server join", Serverjoin, "true"); 
 
+		Register("Show a network join", Networkjoin, "true");
+
+		Register("Show a server join", Serverjoin, "true");
+
+		Register("Should placeholder's api be enabled?", Placeholdersenabled, "true");
+		
+		Register("How often should the client's data be refreshed?", placeholdersUpdate, "5");
 	}
 
 	public String GetToken() {
@@ -168,7 +174,7 @@ public class BConfig extends AbsConfig {
 	public String gettopicformat() {
 		return get(ServerTopic);
 	}
-	
+
 	public int ServerTopicUpdate() {
 		try {
 			return Integer.valueOf(get(ServerTopicUpdate).trim());
@@ -184,13 +190,32 @@ public class BConfig extends AbsConfig {
 			return 11;
 		}
 	}
-	
+
 	public boolean isNetworkjoin() {
 		return boolcheck(Networkjoin);
 	}
-	
+
 	public boolean isServerjoin() {
 		return boolcheck(Serverjoin);
 	}
-
+	
+	public boolean isPlaceholders() {
+		return boolcheck(Placeholdersenabled);
+	}
+	
+	public int placeholdersUpdate() {
+		try {
+			return Integer.valueOf(get(placeholdersUpdate).trim());
+		} catch (NumberFormatException e) {
+			Debug.err("Config option isn't a valid value. Please select a integer value for option: \""
+					+ placeholdersUpdate + "\" in this plugin's app config options");
+			Debug.err("Returning default value of 5");
+			edit(placeholdersUpdate, "5");
+			try {
+				Save();
+			} catch (IOException e1) {
+			}
+			return 5;
+		}
+	}
 }
