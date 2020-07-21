@@ -27,7 +27,7 @@ public class TopicLoader {
 
 	public static void deload() {
 		if (enabled) {
-			Debug.out("Deloadind Topic changer");
+			Debug.out("Deloading Topic changer");
 			if (timer != null)
 				timer.cancel();
 		}
