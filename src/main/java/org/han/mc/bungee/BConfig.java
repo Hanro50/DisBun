@@ -38,10 +38,10 @@ public class BConfig extends AbsConfig {
 		super(FileObj.Fetch("", "config", "txt"));
 
 		Register("The Bot Token for the bot", BotToken, "Insert token here");
-		Register("The main Linked Discord Server\nThis can be added automatically within discord", ServID, "ServerID");
+		Register("The main linked Discord Server\nThis can be added automatically within discord", ServID, "ServerID");
 		Register("Debug Mode", DB, "false");
-		Register("Luckperm:\nLuck perms module", LP, "true");
-		Register("Luckperm:\nUpdate sync in minutes", LPUT, "5");
+		Register("LuckPerms:\nLuckPerms module", LP, "true");
+		Register("LuckPerms:\nUpdate sync in minutes", LPUT, "5");
 
 		Register("Chat Filter Type " //
 				+ "\n \"Local\" : Use the settings on the servers themselves" //
@@ -56,10 +56,10 @@ public class BConfig extends AbsConfig {
 				+ "\n &x for the colour codes", //
 
 				GChatFilter, "&9[&1%DiscordRole%&9] %DiscordColour% %DisplayName% &f: ");
-		Register("Should a user be forced to link up thier account before connecting?", ForceLink, "false");
+		Register("Should a user be forced to link up their account before connecting?", ForceLink, "false");
 
 		Register("Should the perms be checked for the link and unlink minecraft commands?\n" //
-				+ "usefull if you don't want to bother with perms", Permcheck, "false");
+				+ "useful if you don't want to bother with perms", Permcheck, "false");
 
 		Register("Should the bot generate an invite on bootup?\n" //
 				+ "useful for security. If someone can see edit this config\n"//
@@ -68,7 +68,7 @@ public class BConfig extends AbsConfig {
 		//
 		Register("Toggles the Darwin award easter egg.\n I realise this joke isn't for everyone", DarwinAward, "true");
 
-		Register("Should topic updates be ser globaly, locally via the server specific configs or disabled outright",
+		Register("Should topic updates be set globally, locally via the server specific configs or disabled outright",
 				Utopicglobal, "global");
 
 		Register("Server topic format\n %ServName% for the server name\n %PlayerCount% for the player count",
@@ -80,7 +80,7 @@ public class BConfig extends AbsConfig {
 
 		Register("Show a server join", Serverjoin, "true");
 
-		Register("Should placeholder's api be enabled?", Placeholdersenabled, "true");
+		Register("Should PlaceholderAPI be enabled?", Placeholdersenabled, "true");
 		
 		Register("How often should the client's data be refreshed?", placeholdersUpdate, "5");
 	}
