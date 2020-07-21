@@ -10,9 +10,7 @@ A Plugin for Bungeecord that allows you to connect a bungeecord server to a Disc
 (<a href="https://discordpy.readthedocs.io/en/latest/discord.html"> See how to get one here</a>)  </br> 
 5) Reboot you Bungeecord server or type /dbreload. If you added a valid bot token in the last step. It will now generate a bot invite in the output console </br> 
 6) Invite the bot to a server of your choosing and run "!Setup" on that server. </br> 
-</br> 
-If you're lost, use !help in the same discord server your bot is in. </br> 
-</br> 
+
 <h3>Permissions</h3>
 
 1) DisBun.link ->Whether or no someone can manually link their account with /link in game </br> 
@@ -24,3 +22,6 @@ If you're lost, use !help in the same discord server your bot is in. </br>
 1) %DisBun_DiscordColour% ->The current colour of someone's name 
 2) %DisBun_DiscordRole% ->The top most role someone has 
 3) %DisBun_DiscordName% ->The linked Discord account nickname
+
+
+If you're lost, use !help in the same discord server your bot is in. </br> 
