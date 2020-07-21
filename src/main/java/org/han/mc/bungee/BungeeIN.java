@@ -27,20 +27,3 @@ public class BungeeIN implements TextMsg {
 		}
 	}
 }
-/*try {
-player = BPlugin.Self.getProxy().getPlayer(UUID).getDisplayName();
-FileObj.FileChk("PData/");
-FileObj.writeNF(new String[] {player}, FileObj.Fetch("PData/", UUID.toString(), "json"),
-		"playerdata");
-} catch (NullPointerException e) {
-try {
-	player = FileObj.read(FileObj.Fetch("PData/", UUID.toString(), "json"), "");
-} catch (IOException | NullPointerException e1) {
-	Debug.wrn("(" + player + ") not linked, maybe they've not logged in before?");
-}
-} catch (IOException e) {
-}
-*/
-
-//out.writeUTF(Message);
-//Debug.rep("Sending: [Discord] " + player + ":" + Message);

@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.han.mc.spigot.module.Placeholderdata;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.annotations.Expose;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 
 public class MsgHandling {
@@ -27,6 +30,9 @@ public class MsgHandling {
 		if (Output.contains("%DiscordRole%")) {
 			Output = Output.replaceAll("%DiscordRole%", F.role.RoleName);
 		}
+		if (Output.contains("%DiscordName%")) {
+			Output = Output.replaceAll("%DiscordName%", F.Discordname);
+		}
 
 		if (Output.contains("%DiscordColour%") || Output.contains("%DiscordColor%")) {
 			try {
@@ -39,10 +45,14 @@ public class MsgHandling {
 			}
 		}
 		Output = Output.replaceAll("\\&", "§");
+		
+		
+		if (Placeholderdata.enabled) {
+			Output = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(F.PlayerID), Output);
+		}
 		Output = Output + F.Message;
 		Debug.rep("filter: " + SPlugin.Config.getFilter());
 		Debug.rep("Sending: " + Output);
-
 		// .replaceAll("%DisplayName%", T.DisplayName)
 		/// .replaceAll("%RealName%", T.Name).replaceAll("%DiscordName%",
 		/// F.Discordname).replaceAll("\\&", "§") + F.Message;

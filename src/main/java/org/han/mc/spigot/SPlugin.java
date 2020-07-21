@@ -2,12 +2,15 @@ package org.han.mc.spigot;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.han.link.TextMsg;
+import org.han.mc.spigot.module.PlaceHolderapiClientSide;
+import org.han.mc.spigot.module.Placeholderdata;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
@@ -20,13 +23,13 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 
 	@Override
 	public void onEnable() {
-		
+
 		FileObj.Root = this.getFile().getAbsolutePath();
 		FileObj.FileChkroot(this.getFile().getAbsolutePath());
-		FileObj.ClassPath = this.getDataFolder().getAbsolutePath() +"/";
+		FileObj.ClassPath = this.getDataFolder().getAbsolutePath() + "/";
 		FileObj.FileChk("");
-		
-		//FileObj.Init(this.getFile().getAbsoluteFile());
+
+		// FileObj.Init(this.getFile().getAbsoluteFile());
 		Debug.Override = getLogger();
 		FileObj.FileChkroot("");
 		FileObj.FileChk("");
@@ -36,12 +39,22 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		if (!getServer().getPluginManager().isPluginEnabled(this))
 			return;
 		getServer().getMessenger().registerIncomingPluginChannel(this, TextMsg.Channel, this);
-		getServer().getMessenger().registerOutgoingPluginChannel(this,  TextMsg.Channel);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, TextMsg.Channel);
 		getLogger().info("Started Spigot Component of DBcon succesfully.");
 
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF(TextMsg.SubconfigPing);
 		getServer().sendPluginMessage(this, TextMsg.Channel, out.toByteArray());
+
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			if (new PlaceHolderapiClientSide(this).register()) {
+				Placeholderdata.enabled = true;
+				Debug.out("loaded PlaceholderAPI module");
+			} else {
+				Debug.out("PlaceholderAPI module did not load");
+			}
+
+		}
 
 	}
 
@@ -60,26 +73,31 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		String subChannel = in.readUTF();
 		if (subChannel.equalsIgnoreCase(TextMsg.SubChannel)) {
 			MsgHandling.Message(in, getServer());
-			// String plr = in.readUTF();
-			// String msg = in.readUTF();
-			// getServer().broadcastMessage("§9[§1Discord§9] " + plr + ": " + msg);
 		} else if (subChannel.equalsIgnoreCase(TextMsg.Subconfig)) {
 			MsgHandling.ConfigSync(in);
 			Debug.rep("Sync pulse received from head server");
-			
+		} else if (subChannel.equalsIgnoreCase(TextMsg.Subplaceholder)) {
+			Debug.rep("PlaceholderAPI Sync pulse received from head server");
+			if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && Placeholderdata.enabled) {
+
+				PlaceHolderapiClientSide.data = FileObj.fromjson(in.readUTF(), Placeholderdata.class);
+			}
+
 		}
 	}
 
 	private void checkIfBungee() {
 		// we check if the server is Spigot/Paper (because of the spigot.yml file)
-		//if (!getServer().getVersion().replaceAll("-", " ").toLowerCase().contains("spigot")
-			//	|| !getServer().getVersion().replaceAll("-", " ").toLowerCase().contains("paper")) {
-			//getLogger().severe("Unsupported server version detected");
-			///getLogger().severe("Version: " + getServer().getVersion());
-			//getLogger().severe("Things might break");
-			// getServer().getPluginManager().disablePlugin(this);
-			// return;
-		//}
+		// if (!getServer().getVersion().replaceAll("-", "
+		// ").toLowerCase().contains("spigot")
+		// || !getServer().getVersion().replaceAll("-", "
+		// ").toLowerCase().contains("paper")) {
+		// getLogger().severe("Unsupported server version detected");
+		/// getLogger().severe("Version: " + getServer().getVersion());
+		// getLogger().severe("Things might break");
+		// getServer().getPluginManager().disablePlugin(this);
+		// return;
+		// }
 		File file = new File(getDataFolder().getParentFile().getParent(), "spigot.yml");
 		FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 		if (!configuration.getBoolean("settings.bungeecord")) {

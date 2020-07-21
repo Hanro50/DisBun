@@ -10,6 +10,7 @@ import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.com.*;
+import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 import org.han.mc.bungee.module.TopicLoader;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.xlib.Debug;
@@ -88,6 +89,8 @@ public class BPlugin extends Plugin {
 				if (BotCon.isRunning()) {
 					PermCalc.load();
 					TopicLoader.load();
+					PlaceHolderapiServerSide.load();
+					PlaceHolderapiServerSide.SYNC();
 				}
 				if (Config.isGlobal()) {
 					Debug.rep("Chat format sync pulse being sent out");

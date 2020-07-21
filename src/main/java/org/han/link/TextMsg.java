@@ -22,6 +22,7 @@ public interface TextMsg {
 	public final static String SubChannel = "DBconOut";
 	public final static String SubconfigPing = "DBconfigping";
 	public final static String Subconfig = "DBconfig";
+	public final static String Subplaceholder = "DBplaceholder";
 
 	public static List<String> GetServ(long ChannelID) {
 		List<String> T = new ArrayList<String>();

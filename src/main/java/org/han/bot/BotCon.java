@@ -6,11 +6,13 @@ import java.util.Collection;
 import javax.security.auth.login.LoginException;
 
 import org.han.bot.com.Msg;
+import org.han.link.GetDetails;
 import org.han.mc.bungee.BPlugin;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.JDA.Status;
 
 import static net.dv8tion.jda.api.Permission.*;
 import static org.han.xlib.Debug.*;
@@ -20,7 +22,9 @@ public class BotCon {
 	static JDA jda;
 
 	public static boolean isRunning() {
-		return Running;
+		if (!Running)
+			return false;
+		return jda.getStatus().equals(Status.CONNECTED);
 	}
 
 	public static JDA getJDA() {
@@ -40,7 +44,7 @@ public class BotCon {
 		ret.add(MESSAGE_EMBED_LINKS);
 		ret.add(MESSAGE_ATTACH_FILES);
 		ret.add(MESSAGE_HISTORY);
-		
+
 		ret.add(MANAGE_CHANNEL);
 		ret.add(MANAGE_WEBHOOKS);
 		ret.add(MANAGE_ROLES);
@@ -49,25 +53,30 @@ public class BotCon {
 
 	public synchronized static void Start() {
 		String Token = BPlugin.Config.GetToken();
-		if (isRunning()) Stop();
-		
+		if (isRunning())
+			Stop();
+
 		try {
-			jda = JDABuilder.createDefault(Token).addEventListeners(new JDAListener()).build();
+			JDA prep = JDABuilder.createDefault(Token).addEventListeners(new JDAListener()).build();
 			out("Starting bot");
 			// out("Can't redirect JDA errors. Just ignore JDA's complaining");
-			try {
-				jda.awaitReady();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				Trace(e);
+			do {
+				try {
+					prep.awaitReady();
+				} catch (InterruptedException e) {
+					err("JDA has to be started first so this interrupt will be ignored");
+					// TODO Auto-generated catch block
+					Trace(e);
 
-			}
-			Msg.AppInfo = jda.retrieveApplicationInfo().complete();
+				}
+			} while (!prep.getStatus().equals(Status.CONNECTED));
+			Msg.AppInfo = prep.retrieveApplicationInfo().complete();
 			if (BPlugin.Config.isShowInvite()) {
 				out("Bot Invite:");
 				out(Msg.AppInfo.getInviteUrl(0L, perms()));
 			}
-			out(jda.getSelfUser().getName() + " has been started\n");
+			out(prep.getSelfUser().getName() + " has been started\n");
+			jda = prep;
 			Running = true;
 
 		} catch (LoginException | IllegalArgumentException e) {
@@ -82,7 +91,9 @@ public class BotCon {
 			if (isRunning()) {
 				out("Stopping bot");
 				Running = false;
-				jda.shutdownNow();
+				jda.shutdown();
+				GetDetails.reset();
+				jda = null;
 			}
 		} finally {
 			Running = false;

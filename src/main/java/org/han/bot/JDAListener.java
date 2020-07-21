@@ -41,7 +41,7 @@ public class JDAListener extends ListenerAdapter {
 	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 		Msg m = new Msg(event);
 		ComLink.DoCom(m);
-		if (m.Sender.User.isBot() || m.Sender.User.isFake() || m.isCom())
+		if (m.Sender.User.isBot() || m.isCom())
 			return;
 		String Attch = "";
 
