@@ -9,6 +9,7 @@ import org.han.bot.com.Msg;
 import org.han.link.LinkUp;
 import org.han.mc.bungee.BPlugin;
 import org.han.mc.bungee.com.UnLinkcom;
+import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.md_5.bungee.api.ChatColor;
@@ -54,14 +55,17 @@ public class CAccDelink extends ComObj {
 				}
 				if (UnLinkcom.DarwinDelink(player)) {
 					Print.Out(m, "You just got kicked...by yourself...");
+					PlaceHolderapiServerSide.SYNC();
 					return;
 				}
 				Print.Suc(m);
+				PlaceHolderapiServerSide.SYNC();
 				return;
 			}
 
 			LinkUp.Remove(uuid);
 			Print.Suc(m);
+			PlaceHolderapiServerSide.SYNC();
 			return;
 
 		}
@@ -90,6 +94,7 @@ public class CAccDelink extends ComObj {
 			}
 		}
 		Print.Suc(m);
+		PlaceHolderapiServerSide.SYNC();
 	}
 
 	@Override

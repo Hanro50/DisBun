@@ -18,6 +18,10 @@ import com.google.common.io.ByteStreams;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PlaceHolderapiServerSide {
 	public static boolean enabled = false;
@@ -42,7 +46,7 @@ public class PlaceHolderapiServerSide {
 		data = null;
 		if (timer != null)
 			timer.cancel();
-		timer = null; 
+		timer = null;
 		enabled = false;
 	}
 
@@ -59,25 +63,38 @@ public class PlaceHolderapiServerSide {
 		}
 		Debug.rep("starting to sync placeholder data");
 		LinkUp.UUIDList().forEach(f -> {
-			Member mem = GetDetails.getGuild().retrieveMemberById(LinkUp.GetDiscordID(f)).complete();
-			if (mem != null) {
-				Color color = null;
-				if (mem.getRoles().size() > 0) {
-					for (Role Role : mem.getRoles()) {
-						if (Role.getColor() != null) {
-							color = Role.getColor();
-							break;
+			try {
+				Member mem = GetDetails.getGuild().retrieveMemberById(LinkUp.GetDiscordID(f)).complete();
+				if (mem != null) {
+					Color color = null;
+					if (mem.getRoles().size() > 0) {
+						for (Role Role : mem.getRoles()) {
+							if (Role.getColor() != null) {
+								color = Role.getColor();
+								break;
+							}
 						}
+						if (color == null) {
+							color = Color.white;
+						}
+						add(f, mem.getEffectiveName(), "#" + Integer.toHexString(color.getRGB()).substring(2),
+								mem.getRoles().get(0).getName());
+					} else {
+						add(f, mem.getEffectiveName(), "#" + Integer.toHexString(Color.white.getRGB()).substring(2),
+								mem.getRoles().get(0).getName());
 					}
-					if (color == null) {
-						color = Color.white;
-					}
-					add(f, mem.getEffectiveName(), "#" + Integer.toHexString(color.getRGB()).substring(2),
-							mem.getRoles().get(0).getName());
-				} else {
-					add(f, mem.getEffectiveName(), "#" + Integer.toHexString(Color.white.getRGB()).substring(2),
-							mem.getRoles().get(0).getName());
 				}
+			} catch (ErrorResponseException e) {
+				Debug.err(e.getMessage());
+				Debug.err("INVALID MEMBER DATA DETECTED");
+				Debug.err("Purging invalid data from database");
+				ProxiedPlayer player = BPlugin.getproxyserv().getPlayer(f);
+				if (player != null && BPlugin.Config.isForceLink()) {
+					player.disconnect(new ComponentBuilder(
+							"Your account has been delinked as we cannot retrieve your member data from Discord")
+									.color(ChatColor.RED).create());
+				}
+				LinkUp.Remove(f);
 			}
 		});
 

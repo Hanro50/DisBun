@@ -8,6 +8,7 @@ import org.han.bot.com.Msg;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.BPlugin;
+import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 //import org.han.mc.bungee.BPlugin;
 import org.han.xlib.Debug;
 
@@ -38,6 +39,7 @@ public class UnLinkcom extends Command {
 
 		try {
 			DarwinDelink((ProxiedPlayer) sender);
+			PlaceHolderapiServerSide.SYNC();
 
 		} catch (ClassCastException e) {
 			sender.sendMessage(
@@ -68,6 +70,7 @@ public class UnLinkcom extends Command {
 									.replace("%F", ChatColor.WHITE.toString())).color(ChatColor.BOLD).create());
 				});
 			}
+			
 			return true;
 		} else {
 			return false;

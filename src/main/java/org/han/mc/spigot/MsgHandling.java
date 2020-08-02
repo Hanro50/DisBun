@@ -47,7 +47,7 @@ public class MsgHandling {
 		Output = Output.replaceAll("\\&", "§");
 		
 		
-		if (Placeholderdata.enabled) {
+		if (Placeholderdata.enabled && F.PlayerID !=null) {
 			Output = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(F.PlayerID), Output);
 		}
 		Output = Output + F.Message;

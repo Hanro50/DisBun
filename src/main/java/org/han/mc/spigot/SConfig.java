@@ -7,10 +7,12 @@ import org.han.xlib.FileObj;
 public class SConfig extends AbsConfig {
 	static final String Override = "Override";
 	static final String ChatFilter = "ChatFilter";
-
+	static final String DebugMode = "DebugMode";
 	public SConfig() {
 		super(FileObj.Fetch("", "Config", "txt"));
 		Register("Override global settings\n", Override, "false");
+	
+
 		Register("Chat filter settings (This will autosync if Override is set to false)" //
 				+ "\n %DisplayName% : for the display name of the person" //
 				+ "\n %RealName% : for the real name of the person" //
@@ -18,6 +20,8 @@ public class SConfig extends AbsConfig {
 				+ "\n %DiscordColour% : Top Discord role colour (1.16+ recommended)" //
 				+ "\n &x for the colour codes", //
 				ChatFilter, "&9[&%DiscordRole%&9] %DiscordColour% %DisplayName% &f: ");
+		
+		Register("Enable Debug Messages\n", DebugMode, "false");
 		
 	}
 
@@ -39,7 +43,10 @@ public class SConfig extends AbsConfig {
 			}
 		}
 	}
-
+	
+	public boolean DebugMode() {
+		return boolcheck(DebugMode);
+	}
 	// public void
 
 }

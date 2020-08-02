@@ -34,6 +34,7 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		FileObj.FileChkroot("");
 		FileObj.FileChk("");
 		Config = new SConfig();
+		Debug.Debug = Config.DebugMode();
 		getLogger().info("Starting Spigot Component of DBcon");
 		checkIfBungee();
 		if (!getServer().getPluginManager().isPluginEnabled(this))

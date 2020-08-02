@@ -258,7 +258,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Debug.Trace(e);
 		}
 
 		// player.hasPermission(permission);

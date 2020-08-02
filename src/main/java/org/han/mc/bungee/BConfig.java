@@ -6,6 +6,7 @@ import org.han.xlib.AbsConfig;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
+
 public class BConfig extends AbsConfig {
 
 	static final String BotToken = "Bot Token";
@@ -32,6 +33,9 @@ public class BConfig extends AbsConfig {
 
 	static final String Placeholdersenabled = "enabled_Placeholders";
 	static final String placeholdersUpdate = "placeholdersUpdate";
+
+	static final String MethodChangerenabled = "MethodChangerenabled";
+	static final String MethodChangerUpdate = "MethodChangerUpdate";
 
 //§ "§9[§1Discord§9] §f: "
 	public BConfig() {
@@ -81,8 +85,13 @@ public class BConfig extends AbsConfig {
 		Register("Show a server join", Serverjoin, "true");
 
 		Register("Should PlaceholderAPI be enabled?", Placeholdersenabled, "true");
-		
+
 		Register("How often should the client's data be refreshed?", placeholdersUpdate, "5");
+
+		Register("If the method changer should be used", MethodChangerenabled, "true");
+
+		Register("How often should the method the bot is showcasing be refreshed?", MethodChangerUpdate, "5");
+
 	}
 
 	public String GetToken() {
@@ -198,11 +207,11 @@ public class BConfig extends AbsConfig {
 	public boolean isServerjoin() {
 		return boolcheck(Serverjoin);
 	}
-	
+
 	public boolean isPlaceholders() {
 		return boolcheck(Placeholdersenabled);
 	}
-	
+
 	public int placeholdersUpdate() {
 		try {
 			return Integer.valueOf(get(placeholdersUpdate).trim());
@@ -218,4 +227,33 @@ public class BConfig extends AbsConfig {
 			return 5;
 		}
 	}
+
+	public boolean MethodChangerenabled() {
+		return boolcheck(MethodChangerenabled);
+	}
+
+	public int MethodChangerUpdate() {
+		try {
+			return Integer.valueOf(get(MethodChangerUpdate).trim());
+		} catch (NumberFormatException e) {
+			Debug.err("Config option isn't a valid value. Please select a integer value for option: \""
+					+ MethodChangerUpdate + "\" in this plugin's app config options");
+			Debug.err("Returning default value of 5");
+			edit(MethodChangerUpdate, "5");
+			try {
+				Save();
+			} catch (IOException e1) {
+			}
+			return 5;
+		}
+	}
+
+		
+		
+		
+		//if (f.equalsIgnoreCase("null"))
+		//	return null;
+		//return f;
+	
+
 }

@@ -12,6 +12,7 @@ import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.BungeeIN;
+import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.xlib.Debug;
 
@@ -32,9 +33,10 @@ public class JDAListener extends ListenerAdapter {
 		Msg m = new Msg(event);
 		if (m.Sender.User.isBot())
 			return;
-		if (LinkPrep.Excuter(m))
+		if (LinkPrep.Excuter(m)) {
 			Print.Suc(m);
-		else
+			PlaceHolderapiServerSide.SYNC();
+		} else
 			Print.Err(m, "Not a valid link ID");
 	}
 
