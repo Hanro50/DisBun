@@ -36,19 +36,33 @@ public class MsgHandling {
 
 		if (Output.contains("%DiscordColour%") || Output.contains("%DiscordColor%")) {
 			try {
-			Output = Output.replaceAll("%DiscordColour%", ChatColor.of(F.role.Color).toString());
-			Output = Output.replaceAll("%DiscordColor%", ChatColor.of(F.role.Color).toString());
+				Output = Output.replaceAll("%DiscordColour%", ChatColor.of(F.role.Color).toString());
+				Output = Output.replaceAll("%DiscordColor%", ChatColor.of(F.role.Color).toString());
 			} catch (StringIndexOutOfBoundsException e) {
 				Debug.Trace(e);
 				Debug.out(F.role.Color + "");
-				
+
 			}
 		}
 		Output = Output.replaceAll("\\&", "§");
-		
-		
-		if (Placeholderdata.enabled && F.PlayerID !=null) {
-			Output = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(F.PlayerID), Output);
+
+		if (Placeholderdata.enabled) {
+			if (F.PlayerID != null)
+				Output = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(F.PlayerID), Output);
+			else {
+				String[] rebuilder = Output.split("\\%");
+				if (rebuilder.length > 1) {
+					Output = "";
+					for (int i = 0; i < rebuilder.length; i += 2) {
+						Output = Output + rebuilder[i];
+					}
+
+					if (rebuilder.length % 2 == 0) {
+						Output =Output + "%" +rebuilder[rebuilder.length - 1];
+					}
+				}
+
+			}
 		}
 		Output = Output + F.Message;
 		Debug.rep("filter: " + SPlugin.Config.getFilter());
