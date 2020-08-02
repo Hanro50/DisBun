@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.han</groupId>
 	<artifactId>DisBun</artifactId>
-	<version>0.0.7-SNAPSHOT</version>
+	<version>0.0.8-SNAPSHOT</version>
 	<properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -154,7 +154,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.2.0_180</version>
+			<version>4.2.0_183</version>
 			<exclusions>
 				<exclusion>
 					<groupId>club.minnced</groupId>
