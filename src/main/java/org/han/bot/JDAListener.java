@@ -87,7 +87,7 @@ public class JDAListener extends ListenerAdapter {
 
 	public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
 		try {
-			PermCalc.DelGroup(event.getRole());
+			PermCalc.self.DelGroup(event.getRole());
 		} catch (IOException e) {
 		}
 	}

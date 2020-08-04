@@ -6,14 +6,12 @@ import java.util.UUID;
 
 import org.han.bot.BotCon;
 import org.han.bot.JDAIN;
+import org.han.bot.com.ComLink;
 import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.com.*;
-import org.han.mc.bungee.module.Methodchanger;
-import org.han.mc.bungee.module.PlaceHolderapiServerSide;
-import org.han.mc.bungee.module.TopicLoader;
-import org.han.mc.bungee.module.Perms.lucky.PermCalc;
+
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
@@ -25,10 +23,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BPlugin extends Plugin {
-
 	public static BPlugin Self;
 	public static BConfig Config;
-	public static BServerConfig ServConfig;
+	// public static BServerConfig ServConfig;
+	public static ModuleLoader loader;
 
 	public static void main(String[] w) {
 		FileObj.Init();
@@ -64,8 +62,13 @@ public class BPlugin extends Plugin {
 	public static void reloadConfig() {
 		Debug.out("Loading:");
 		Config = new BConfig();
-		ServConfig = new BServerConfig(getproxyserv().getServers().keySet());
+		Config.UpdateCheck();
 		Debug.Debug = Config.DebugMode();
+		// ServConfig = new BServerConfig(getproxyserv().getServers().keySet());
+		loader = new ModuleLoader();
+		loader.UpdateCheck();
+		ComLink.UpdateCheck();
+
 		SrvrunAsync(new Runnable() {
 			@Override
 			public void run() {
@@ -88,11 +91,7 @@ public class BPlugin extends Plugin {
 				BotCon.Start();
 
 				if (BotCon.isRunning()) {
-					PermCalc.load();
-					TopicLoader.load();
-					PlaceHolderapiServerSide.load();
-					PlaceHolderapiServerSide.SYNC();
-					Methodchanger.load();
+					loader.LOAD();
 				}
 				if (Config.isGlobal()) {
 					Debug.rep("Chat format sync pulse being sent out");
@@ -107,9 +106,7 @@ public class BPlugin extends Plugin {
 	}
 
 	@Override
-	public void onEnable() {
-		// You should not put an enable message in your plugin.
-		// BungeeCord already does so
+	public void onLoad() {
 		Self = this;
 		getProxy().registerChannel(TextMsg.Channel);
 		getProxy().getPluginManager().registerListener(this, new Events());
@@ -119,21 +116,28 @@ public class BPlugin extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, new InfoCom());
 		FileObj.Init(getProxy().getPluginsFolder(), getDataFolder().getName());
 		Debug.Override = getLogger();
-		
 		Debug.out("Plugin File : " + FileObj.ClassPath);
+
+	}
+
+	@Override
+	public void onEnable() {
+		// You should not put an enable message in your plugin.
+		// BungeeCord already does so
+
 		reloadConfig();
 
 		// BotCon.Start();
 
 		// PermCalc.load();
 		// TopicLoader.load();
-		//Debug.out("Fully loaded");
+		// Debug.out("Fully loaded");
 	}
 
 	@Override
 	public void onDisable() {
 		BotCon.Stop();
-		PermCalc.deload();
+		loader.DELOAD();
 		getLogger().info("Goodbye world...");
 
 	}

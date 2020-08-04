@@ -84,7 +84,7 @@ public class LinkUp {
 	public static boolean isforcedlink(String ServName) {
 		if (BPlugin.Config.isForceLink())
 			return true;
-		return BPlugin.ServConfig.isforcedlink(ServName);
+		return BPlugin.Config.isForceLink(ServName);
 
 	}
 

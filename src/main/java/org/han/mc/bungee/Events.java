@@ -6,7 +6,6 @@ import org.han.bot.BotCon;
 import org.han.bot.JDAIN;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
-import org.han.mc.bungee.module.JoinMessages;
 import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.xlib.Debug;
@@ -57,7 +56,7 @@ public class Events implements Listener {
 			} else if (!event.isCancelled()) {
 				JoinMessages.serverjoin(event.getTarget(), player);
 			}
-			PermCalc.UpdatePerms(player);
+			PermCalc.self.UpdatePerms(player);
 		}
 
 	}

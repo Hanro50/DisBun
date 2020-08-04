@@ -30,13 +30,6 @@ public class UnLinkcom extends Command {
 	public void execute(CommandSender sender, String[] args) {
 		// TODO Auto-generated method stub
 
-		if (BPlugin.Config.isPermcheck() && !hasPermission(sender)) {
-			sender.sendMessage(
-					new ComponentBuilder("You do not appear to have the required permissions to execute the command")
-							.color(ChatColor.RED).create());
-			return;
-		}
-
 		try {
 			DarwinDelink((ProxiedPlayer) sender);
 			PlaceHolderapiServerSide.SYNC();

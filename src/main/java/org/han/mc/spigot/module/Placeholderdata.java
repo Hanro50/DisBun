@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.han.mc.bungee.BPlugin;
+import org.han.mc.bungee.module.DisBunTimerModule;
 
 import com.google.gson.annotations.Expose;
 
@@ -28,8 +29,8 @@ public class Placeholderdata {
 	@Expose
 	Map<UUID, userObj> internaldata = new HashMap<UUID, userObj>();
 
-	public void Add(UUID UserID, String NickName, String NickNameClr, String TopRole) {
-		if (BPlugin.Config != null && BPlugin.Config.isPlaceholders()) {
+	public void Add(DisBunTimerModule mod,UUID UserID, String NickName, String NickNameClr, String TopRole) {
+		if (BPlugin.Config != null && mod.enabled) {
 			userObj UserObj = new userObj(NickName, NickNameClr,TopRole);
 			internaldata.remove(UserID);
 			internaldata.put(UserID, UserObj);

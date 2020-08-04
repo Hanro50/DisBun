@@ -25,7 +25,7 @@ public class CMakeGroup extends ComObj {
 	@Override
 	public void Run(Msg m) {
 		// TODO Auto-generated method stub
-		if (!PermCalc.endabled) {
+		if (!PermCalc.self.enabled) {
 			Print.Err(m, "LuckPerms component is not running");
 			return;
 		}
@@ -41,7 +41,7 @@ public class CMakeGroup extends ComObj {
 
 		}
 		
-		PermCalc.MakeGroup(m, T.get(0) );
+		PermCalc.self.MakeGroup(m, T.get(0) );
 	}
 
 	@Override

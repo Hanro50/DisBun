@@ -21,11 +21,11 @@ public class CSyncGroup extends ComObj {
 	@Override
 	public void Run(Msg m) {
 		// TODO Auto-generated method stub
-		if (PermCalc.endabled == false) {
+		if (PermCalc.self.enabled == false) {
 			Print.Err(m, "Luckperm module not loaded");
 		}
 		else if (m.getText().toLowerCase().equals("now")) {
-			lastreturn =   PermCalc.ReSyncGroup();
+			lastreturn =   PermCalc.self.ReSyncGroup();
 			Print.Out(m,"Run this command again with \"return\" to get output log");
 		}
 		else if (m.getText().toLowerCase().equals("return")) {

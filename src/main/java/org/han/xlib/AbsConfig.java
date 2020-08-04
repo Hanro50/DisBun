@@ -3,7 +3,9 @@ package org.han.xlib;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +21,7 @@ import java.util.Map;
 public abstract class AbsConfig {
 	private final Map<String, String> InternalSave = new HashMap<String, String>();
 	private final File SaveFile;
+	protected boolean NEWCONFIG;
 
 	private String Settingsfilter(String in) {
 		return in.replaceAll("\n", "").replaceAll(":", "").replaceAll("\\\\", "");
@@ -42,7 +45,8 @@ public abstract class AbsConfig {
 	 */
 	protected AbsConfig(File Defaultfile) {
 		SaveFile = Defaultfile;
-		if (SaveFile.exists()) {
+		NEWCONFIG = !SaveFile.exists();
+		if (!NEWCONFIG) {
 			try {
 				String[] File = FileObj.read(Defaultfile);
 				for (String string : File) {
@@ -144,5 +148,42 @@ public abstract class AbsConfig {
 	protected boolean boolcheck(String setting) {
 		return get(setting).trim().equalsIgnoreCase("true");
 	}
+	/**
+	 * Grabs a Configuration option and checks what value it is equal to. 
+	 * @param setting The Key
+	 * @param DefaultVal The value to return if the setting isn't a valid number
+	 * @return The value of the setting
+	 */
+	protected int Valuecheck(String setting, int DefaultVal) {
+		try {
+			return Integer.valueOf(get(setting).trim());
+		} catch (NumberFormatException e) {
+			Debug.err("Config option isn't a valid value. Please select a integer value for option: \""
+					+ setting + "\" in this plugin's app config options");
+			Debug.err("Returning default value of " +DefaultVal );
+			edit(setting,""+(DefaultVal));
+			try {
+				Save();
+			} catch (IOException e1) {
+			}
+			return DefaultVal;
+		}
+	}
+	
+	public static void UpdateConfig(AbsConfig OLD, AbsConfig NW) {
+		List<String> F = new ArrayList<String>();
+		F.addAll(NW.InternalSave.keySet());
+		for (String string : F) {
+			NW.edit(string, OLD.get(string));
+		}		
+		try {
+			NW.Save();
+		} catch (IOException e) {
+			Debug.Trace(e);
+		}
+		
+		
+	}
+	
 	
 }

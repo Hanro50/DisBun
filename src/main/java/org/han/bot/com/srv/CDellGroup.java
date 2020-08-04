@@ -26,7 +26,7 @@ public class CDellGroup extends ComObj {
 	@Override
 	public void Run(Msg m) {
 		// TODO Auto-generated method stub
-		if (!PermCalc.endabled) {
+		if (!PermCalc.self.enabled) {
 			Print.Err(m, "LuckPerms component is not running");
 			return;
 		}
@@ -43,7 +43,7 @@ public class CDellGroup extends ComObj {
 		}
 		
 		try {
-			PermCalc.DelGroup(T.get(0));
+			PermCalc.self.DelGroup(T.get(0));
 			Print.Suc(m);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

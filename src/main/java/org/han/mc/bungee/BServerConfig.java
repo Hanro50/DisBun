@@ -7,7 +7,7 @@ import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
 
-
+@Deprecated
 public class BServerConfig extends AbsConfig {
 	static final String ForceSyncServkey = "ForceLink";
 	static final String ServerTopic = "ServerTopicFormat";
@@ -18,8 +18,8 @@ public class BServerConfig extends AbsConfig {
 			Register("Force link for "+ServName+" specifically?\n" //
 					+ "This assumes globally you're not forced to link accounts"//
 					, ServName+"."+ForceSyncServkey, "false");
-			Register("Server topic format\n %ServName% for the server name\n %PlayerCount% for the player count",
-					ServName+"."+ServerTopic, "%PlayerCount% player(s) are currently playing on %ServName%");
+	//		Register("Server topic format\n %ServName% for the server name\n %PlayerCount% for the player count",
+	//				ServName+"."+ServerTopic, "%PlayerCount% player(s) are currently playing on %ServName%");
 		});
 		
 		Debug.rep("Done with server specific config");

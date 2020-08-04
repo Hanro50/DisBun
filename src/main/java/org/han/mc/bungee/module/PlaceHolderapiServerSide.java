@@ -9,6 +9,7 @@ import org.han.link.GetDetails;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.BPlugin;
+import org.han.mc.bungee.ModuleLoader;
 import org.han.mc.spigot.module.Placeholderdata;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
@@ -23,26 +24,24 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PlaceHolderapiServerSide {
-	public static boolean enabled = false;
+public class PlaceHolderapiServerSide extends DisBunTimerModule {
 	static Placeholderdata data;
-	static Timer timer;
+	static PlaceHolderapiServerSide self;
 
-	public static void load() {
-		if (enabled) {
-			deload();
-		}
-		if (BPlugin.Config.isPlaceholders()) {
-			data = new Placeholderdata();
-			Debug.rep("loading placeholder module");
-			timer = new Timer();
-			timer.schedule(new AutoUpdate(), 10000, BPlugin.Config.placeholdersUpdate() * 60000);
-			enabled = true;
-		}
+	public void load(ModuleLoader Loader) {
 
+		data = new Placeholderdata();
+		Debug.rep("loading placeholder module");
+		timer = new Timer();
+		timer.schedule(new AutoUpdate(), 10000, Loader.UPDATETIMER(this) * 60000);
+		enabled = true;
+		self = this;
+		SYNC();
+
+		
 	}
 
-	public static void deload() {
+	public void deload() {
 		data = null;
 		if (timer != null)
 			timer.cancel();
@@ -51,14 +50,14 @@ public class PlaceHolderapiServerSide {
 	}
 
 	public static void add(UUID UserID, String NickName, String NickNameClr, String toprole) {
-		if (enabled) {
+		if (self.enabled) {
 			if (!(UserID == null || NickName == null || NickNameClr == null || toprole == null))
-				data.Add(UserID, NickName, NickNameClr, toprole);
+				data.Add(self,UserID, NickName, NickNameClr, toprole);
 		}
 	}
 
 	public static void SYNC() {
-		if (!enabled) {
+		if (!self.enabled) {
 			return;
 		}
 		Debug.rep("starting to sync placeholder data");
@@ -118,6 +117,30 @@ public class PlaceHolderapiServerSide {
 		public void run() {
 			SYNC();
 		}
+
+	}
+
+	@Override
+	public String HelpText() {
+		// TODO Auto-generated method stub
+		return "Should PlaceholderAPI be enabled?";
+	}
+
+	@Override
+	public int DefaultTime() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
+
+	@Override
+	public String Name() {
+		// TODO Auto-generated method stub
+		return "PlaceHolderAPI";
+	}
+
+	@Override
+	public void AdCon(ModuleLoader Loader) {
+		// TODO Auto-generated method stub
 
 	}
 

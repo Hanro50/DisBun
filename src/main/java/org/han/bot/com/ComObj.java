@@ -27,7 +27,7 @@ public abstract class ComObj {
 	 * messages. </br>
 	 * 
 	 * @author hanro50
-	 * @implNote This shouldn't change...unless JDA/the discord API changes. 
+	 * @implNote This shouldn't change...unless JDA/the discord API changes.
 	 */
 	public static enum Place {
 		Any {
@@ -95,10 +95,11 @@ public abstract class ComObj {
 	 * @author hanro50
 	 * @implNote This method is edited a lot depending on the project in question
 	 */
-	public static enum Visible {
-		yes, LuckPerm {
+	public enum Visible {
+		yes,
+		LuckPerm {
 			public boolean chk(Msg m) {
-				return PermCalc.endabled;
+				return PermCalc.self.enabled;
 			}
 		},
 		no {

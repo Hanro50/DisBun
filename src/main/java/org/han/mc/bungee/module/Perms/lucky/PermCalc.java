@@ -18,6 +18,8 @@ import org.han.bot.com.Msg;
 import org.han.link.GetDetails;
 import org.han.link.LinkUp;
 import org.han.mc.bungee.BPlugin;
+import org.han.mc.bungee.ModuleLoader;
+import org.han.mc.bungee.module.DisBunTimerModule;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
@@ -38,16 +40,14 @@ import net.luckperms.api.node.types.DisplayNameNode;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PermCalc implements ContextCalculator<ProxiedPlayer> {
+public class PermCalc extends DisBunTimerModule implements ContextCalculator<ProxiedPlayer> {
 	// final static String HEADER = "dbcon:";
 	static String KEY = "disbun:";
 	static String LINK = KEY + "link";
 	static String MEMBER = KEY + "member";
 	static String ROLE = KEY + "role";
 	static String SYNC = KEY + "sync";
-	static ContextCalculator<net.md_5.bungee.api.connection.ProxiedPlayer> self;
-	static Timer timer;
-	public static boolean endabled = false;
+	public static PermCalc self;
 
 	static ReentrantLock cachlock = new ReentrantLock();
 
@@ -55,31 +55,29 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 	 * Load the lucksperms component of this plugin
 	 */
 
-	public static void load() {
-		deload();
-		if (BPlugin.Config.LPEnabled() && BotCon.isRunning()) {
-			try {
-				Debug.rep("Trying to load Luckperms intergration");
-				LuckPerms api = LuckPermsProvider.get();
-				self = new PermCalc();
-				api.getContextManager().registerCalculator(self);
-				endabled = true;
-				ReSyncGroup();
-				Debug.rep("Luckperms Sync check will run every: " + BPlugin.Config.LPRefresh() + " minutes");
-				Timer timer = new Timer();
-				timer.schedule(new AutoUpdate(), 60000, BPlugin.Config.LPRefresh() * 60000);
-				Debug.rep("Successfully loaded Luckperms intergration");
+	public void load(ModuleLoader Loader) {
 
-			} catch (Exception e) {
-				Debug.out("Unable to load Luckperm integration");
-				Debug.Trace(e);
-				endabled = false;
-			}
+		try {
+			Debug.rep("Trying to load Luckperms intergration");
+			LuckPerms api = LuckPermsProvider.get();
+			self = new PermCalc();
+			api.getContextManager().registerCalculator(self);
+			enabled = true;
+			ReSyncGroup();
+			Debug.rep("Luckperms Sync check will run every: " + Loader.UPDATETIMER(this) + " minutes");
+			Timer timer = new Timer();
+			timer.schedule(new AutoUpdate(), 60000, Loader.UPDATETIMER(this) * 60000);
+			Debug.rep("Successfully loaded Luckperms intergration");
+
+		} catch (Exception e) {
+			Debug.out("Unable to load Luckperm integration");
+			Debug.Trace(e);
+			enabled = false;
 		}
 	}
 
-	public static void deload() {
-		if (endabled) {
+	public void deload() {
+		if (enabled) {
 			if (timer != null) {
 				timer.cancel();
 			}
@@ -87,12 +85,12 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 			LuckPerms api = LuckPermsProvider.get();
 			api.getContextManager().unregisterCalculator(self);
 			self = null;
-			endabled = false;
+			enabled = false;
 		}
 	}
 
-	public static String ReSyncGroup() {
-		if (!endabled)
+	public String ReSyncGroup() {
+		if (!enabled)
 			return "Luckperm module isn't running";
 		Debug.rep("Starting Luckperms resync operation");
 		File[] L = FileObj.FileList("DB/", "json");
@@ -153,14 +151,14 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		return out + "```";
 	}
 
-	public static void DelGroup(Role R) throws FileNotFoundException, IOException {
-		if (!endabled)
+	public void DelGroup(Role R) throws FileNotFoundException, IOException {
+		if (!enabled)
 			return;
 		GroupObj.Load(R.getId()).Dell();
 	}
 
-	public static void MakeGroup(Msg m, Role R) {
-		if (!endabled)
+	public void MakeGroup(Msg m, Role R) {
+		if (!enabled)
 			return;
 		LuckPerms api = LuckPermsProvider.get();
 		Group T = api.getGroupManager().getGroup(KEY + R.getName());
@@ -187,8 +185,8 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		// Updateobj.Do(UUID);
 	}
 
-	public static void UpdatePerms(ProxiedPlayer player) {
-		if (!endabled)
+	public void UpdatePerms(ProxiedPlayer player) {
+		if (!enabled)
 			return;
 		try {
 			String ID = LinkUp.GetDiscordID(player.getUniqueId());
@@ -264,7 +262,7 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		// player.hasPermission(permission);
 	}
 
-	static public class AutoUpdate extends TimerTask {
+	public class AutoUpdate extends TimerTask {
 
 		@Override
 		public void run() {
@@ -393,5 +391,29 @@ public class PermCalc implements ContextCalculator<ProxiedPlayer> {
 		}
 
 		return builder.build();
+	}
+
+	@Override
+	public String HelpText() {
+		// TODO Auto-generated method stub
+		return "LuckPerms:\nLuckPerms module";
+	}
+
+	@Override
+	public int DefaultTime() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
+
+	@Override
+	public String Name() {
+		// TODO Auto-generated method stub
+		return "LuckyPerms";
+	}
+
+	@Override
+	public void AdCon(ModuleLoader Loader) {
+		// TODO Auto-generated method stub
+
 	}
 }
