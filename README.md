@@ -23,5 +23,8 @@ A Plugin for Bungeecord that allows you to connect a Bungeecord server to a Disc
 2) %DisBun_DiscordRole% ->The top most role someone has 
 3) %DisBun_DiscordName% ->The linked Discord account nickname
 
+<h3>The method changer</h3>
+This plugin now provides a method to edit the "Activity" your bot is performing. On first boot a text file called "Methodfile will be generated". This almost a direct pass through to the section of the discord bot API that handles the "Activity" text for the discord bot this plugin will start. </br>
+This can be toggled off in the config file like every other module.
 
 If you're lost, use !help in the same discord server your bot is in. </br> 
