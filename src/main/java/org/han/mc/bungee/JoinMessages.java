@@ -11,6 +11,7 @@ import org.han.link.TextMsg;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -31,17 +32,20 @@ public class JoinMessages {
 				}
 
 				if (M == null) {
-					E = new EmbedBuilder()
-							.setAuthor(playerName + Message, null, "https://crafatar.com/avatars/" + playerID)
-							.setColor(color).build();
+					E = new EmbedBuilder().setAuthor(String.format(Message, playerName), null,
+							"https://crafatar.com/avatars/" + playerID).setColor(color).build();
 
 				} else {
-					E = new EmbedBuilder().setAuthor(M.getEffectiveName() + Message, null, M.getUser().getAvatarUrl())
+					E = new EmbedBuilder()
+							.setAuthor(String.format(Message, M.getEffectiveName()), null, M.getUser().getAvatarUrl())
 							.setColor(color).build();
 				}
 
 				TextMsg.GetChn(ServName).forEach(f -> {
-					BotCon.getJDA().getTextChannelById(f).sendMessage(E).queue();
+					TextChannel CHL = BotCon.getJDA().getTextChannelById(f);
+					if (CHL != null) {
+						CHL.sendMessage(E).queue();
+					}
 				});
 			}
 
@@ -55,14 +59,14 @@ public class JoinMessages {
 			serverjoin(serverInfo, player);
 			return;
 		}
-		Print(Color.green, " has joined the network", player, serverInfo.getName());
+		Print(Color.green, BPlugin.Langsys.StringJoinNetworkText(), player, serverInfo.getName());
 
 	}
 
 	public static void serverjoin(ServerInfo serverInfo, ProxiedPlayer player) {
 		if (!BPlugin.Config.isServerjoin())
 			return;
-		Print(Color.green, " has joined " + serverInfo.getName(), player, serverInfo.getName());
+		Print(Color.green, serverInfo.getName() + ":" + BPlugin.Langsys.StringJoinText(), player, serverInfo.getName());
 	}
 
 	public static void networkleave(ServerInfo serverInfo, ProxiedPlayer player) {
@@ -70,13 +74,13 @@ public class JoinMessages {
 			serverleave(serverInfo, player);
 			return;
 		}
-		Print(Color.red, " has left the network", player, serverInfo.getName());
+		Print(Color.red, BPlugin.Langsys.StringLeftNetworkText(), player, serverInfo.getName());
 	}
 
 	public static void serverleave(ServerInfo serverInfo, ProxiedPlayer player) {
 		if (!BPlugin.Config.isServerjoin())
 			return;
-		Print(Color.red, " has left " + serverInfo.getName(), player, serverInfo.getName());
+		Print(Color.red, serverInfo.getName() + ":" + BPlugin.Langsys.StringLeftText(), player, serverInfo.getName());
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.han.bot.BotCon;
 import org.han.bot.JDAIN;
 import org.han.bot.com.ComLink;
+import org.han.link.Channels;
+import org.han.link.LangLoader;
 import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
@@ -27,6 +29,7 @@ public class BPlugin extends Plugin {
 	public static BConfig Config;
 	// public static BServerConfig ServConfig;
 	public static ModuleLoader loader;
+	public static LangLoader Langsys;
 
 	public static void main(String[] w) {
 		FileObj.Init();
@@ -64,6 +67,7 @@ public class BPlugin extends Plugin {
 		Config = new BConfig();
 		Config.UpdateCheck();
 		Debug.Debug = Config.DebugMode();
+		 Langsys = LangLoader.Load(); 
 		// ServConfig = new BServerConfig(getproxyserv().getServers().keySet());
 		loader = new ModuleLoader();
 		loader.UpdateCheck();
@@ -108,7 +112,11 @@ public class BPlugin extends Plugin {
 	@Override
 	public void onLoad() {
 		Self = this;
-		getProxy().registerChannel(TextMsg.Channel);
+		
+		
+		
+		
+		getProxy().registerChannel(Channels.Main);
 		getProxy().getPluginManager().registerListener(this, new Events());
 		getProxy().getPluginManager().registerCommand(this, new Linkcom());
 		getProxy().getPluginManager().registerCommand(this, new UnLinkcom());

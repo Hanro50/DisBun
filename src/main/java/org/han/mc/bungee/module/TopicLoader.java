@@ -1,5 +1,6 @@
 package org.han.mc.bungee.module;
 
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -105,7 +106,6 @@ public class TopicLoader extends DisBunTimerModule {
 		Loader.regSettings(this,
 				"Server topic format\n %ServName% for the server name\n %PlayerCount% for the player count",
 				GlobalFormat, "%PlayerCount% player(s) are currently playing on %ServName%");
-		
 
 		for (String f : BPlugin.getservinfo().keySet()) {
 			Loader.regSettings(this,
@@ -118,5 +118,7 @@ public class TopicLoader extends DisBunTimerModule {
 		//
 		// });
 	}
+
+	
 
 }

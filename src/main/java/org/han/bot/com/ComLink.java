@@ -1,6 +1,7 @@
 package org.han.bot.com;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,21 +24,12 @@ public class ComLink extends AbsConfig {
 		else
 			Register("Version of this file\n Do not edit", Version, "0.0.0");
 		// TODO Auto-generated constructor stub
-		RegCom(new CToggleDebug());
-		RegCom(new CDeTrust());
-		RegCom(new CHelp());
-		RegCom(new CTrust());
-		RegCom(new CInfo());
 
-		RegCom(new CAccDelink());
-		RegCom(new CDellGroup());
-		RegCom(new CLink());
-		RegCom(new CList());
-		RegCom(new CMakeGroup());
-		RegCom(new CReload());
-		RegCom(new CSetup());
-		RegCom(new CSyncGroup());
-		RegCom(new CUnlink());
+		Coms.keySet().forEach(f -> {
+			Register("Enable the " + f + " command", "com." + f, "true");
+			remap.put(BPlugin.Langsys.JDAcomText(f), f);
+		});
+
 	}
 
 	public static void UpdateCheck() {
@@ -55,18 +47,36 @@ public class ComLink extends AbsConfig {
 		FileObj.Fetch("", "oldDiscord_Config", "txt").deleteOnExit();
 	}
 
-	private Map<String, ComObj> Coms = new ConcurrentHashMap<String, ComObj>();
+	// Register("Enable the " + com + " command", "com." + com, "true");
+	private static Map<String, ComObj> Coms = new ConcurrentHashMap<String, ComObj>();
 
 	static {
-		Self = new ComLink();
 
+		RegCom(new CToggleDebug());
+		RegCom(new CDeTrust());
+		RegCom(new CHelp());
+		RegCom(new CTrust());
+		RegCom(new CInfo());
+
+		RegCom(new CAccDelink());
+		RegCom(new CDellGroup());
+		RegCom(new CLink());
+		RegCom(new CList());
+		RegCom(new CMakeGroup());
+		RegCom(new CReload());
+		RegCom(new CSetup());
+		RegCom(new CSyncGroup());
+		RegCom(new CUnlink());
+		Self = new ComLink();
 	}
 
 	public static final Map<String, ComObj> GetComMap() {
-		return Self.Coms;
+		return Coms;
 	}
+	
+	private Map<String, String> remap = new HashMap<String, String>();
 
-	public void RegCom(ComObj Com) {
+	public static void RegCom(ComObj Com) {
 		String com = Com.getCom().trim().toLowerCase();
 		if (Coms.containsKey(com)) {
 			int i = 1;
@@ -77,7 +87,7 @@ public class ComLink extends AbsConfig {
 			Debug.err("Unique names should be used->Renaming command \"" + Com.getCom() + "\" to \"" + com + "\"");
 		}
 		Coms.put(com, Com);
-		Register("Enable the " + com + " command", "com." + com, "true");
+
 	}
 
 	public static boolean iSEnable(String com) {
@@ -87,17 +97,18 @@ public class ComLink extends AbsConfig {
 	public static void DoCom(Msg m) {
 		if (!m.isCom())
 			return;
-
-		if (Self.Coms.containsKey(m.getCom())) {
+		String com = Self.remap.get(m.getCom());
+		if (Coms.containsKey(com)) {
+			
+			
 			if (!iSEnable(m.getCom())) {
 				Print.Err(m, "This command has been disabled by the operator");
 				return;
 			}
-
-			ComObj CC = Self.Coms.get(m.getCom());
+			ComObj CC = Coms.get(com);
 			if (CC.place.chk(m)) {
 				if (CC.permlv.chk(m))
-					Self.Coms.get(m.getCom()).Run(m);
+					Coms.get(m.getCom()).Run(m);
 				else
 					Print.Err(m, "insufficient Permissions");
 			}

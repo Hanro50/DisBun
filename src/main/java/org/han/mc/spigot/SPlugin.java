@@ -1,6 +1,8 @@
 package org.han.mc.spigot;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -8,7 +10,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.han.link.TextMsg;
+import org.han.link.Channels;
+import org.han.mc.spigot.module.Advancement;
 import org.han.mc.spigot.module.PlaceHolderapiClientSide;
 import org.han.mc.spigot.module.Placeholderdata;
 import org.han.xlib.Debug;
@@ -18,12 +21,18 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+
 public class SPlugin extends JavaPlugin implements PluginMessageListener {
 	static SConfig Config;
+	static SPlugin self;
+	List<String> AchievementTxt = new ArrayList<String>();
 
 	@Override
 	public void onEnable() {
-
+		self= this;
 		FileObj.Root = this.getFile().getAbsolutePath();
 		FileObj.FileChkroot(this.getFile().getAbsolutePath());
 		FileObj.ClassPath = this.getDataFolder().getAbsolutePath() + "/";
@@ -39,13 +48,14 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		checkIfBungee();
 		if (!getServer().getPluginManager().isPluginEnabled(this))
 			return;
-		getServer().getMessenger().registerIncomingPluginChannel(this, TextMsg.Channel, this);
-		getServer().getMessenger().registerOutgoingPluginChannel(this, TextMsg.Channel);
+		getServer().getMessenger().registerIncomingPluginChannel(this, Channels.Main, this);
+		getServer().getMessenger().registerOutgoingPluginChannel(this,Channels.Main);
 		getLogger().info("Started Spigot Component of DBcon succesfully.");
+		getServer().getPluginManager().registerEvents(new SListener(), this);
 
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF(TextMsg.SubconfigPing);
-		getServer().sendPluginMessage(this, TextMsg.Channel, out.toByteArray());
+		out.writeUTF(Channels.configPing);
+		getServer().sendPluginMessage(this, Channels.Main, out.toByteArray());
 
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			if (new PlaceHolderapiClientSide(this).register()) {
@@ -67,17 +77,17 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 		// TODO Auto-generated method stub
-		if (!channel.equalsIgnoreCase(TextMsg.Channel)) {
+		if (!channel.equalsIgnoreCase(Channels.Main)) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		String subChannel = in.readUTF();
-		if (subChannel.equalsIgnoreCase(TextMsg.SubChannel)) {
+		if (subChannel.equalsIgnoreCase(Channels.Out)) {
 			MsgHandling.Message(in, getServer());
-		} else if (subChannel.equalsIgnoreCase(TextMsg.Subconfig)) {
+		} else if (subChannel.equalsIgnoreCase(Channels.configsend)) {
 			MsgHandling.ConfigSync(in);
 			Debug.rep("Sync pulse received from head server");
-		} else if (subChannel.equalsIgnoreCase(TextMsg.Subplaceholder)) {
+		} else if (subChannel.equalsIgnoreCase(Channels.placeholderdata)) {
 			Debug.rep("PlaceholderAPI Sync pulse received from head server");
 			if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && Placeholderdata.enabled) {
 
@@ -88,17 +98,6 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 	}
 
 	private void checkIfBungee() {
-		// we check if the server is Spigot/Paper (because of the spigot.yml file)
-		// if (!getServer().getVersion().replaceAll("-", "
-		// ").toLowerCase().contains("spigot")
-		// || !getServer().getVersion().replaceAll("-", "
-		// ").toLowerCase().contains("paper")) {
-		// getLogger().severe("Unsupported server version detected");
-		/// getLogger().severe("Version: " + getServer().getVersion());
-		// getLogger().severe("Things might break");
-		// getServer().getPluginManager().disablePlugin(this);
-		// return;
-		// }
 		File file = new File(getDataFolder().getParentFile().getParent(), "spigot.yml");
 		FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 		if (!configuration.getBoolean("settings.bungeecord")) {
@@ -109,4 +108,33 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 			getServer().getPluginManager().disablePlugin(this);
 		}
 	}
+
+	class SListener implements Listener {
+		@EventHandler
+		void PlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent e) {
+			if (e.getAdvancement().getKey().getKey().split("/").length<1 || e.getAdvancement().getKey().getKey().split("/")[0].equalsIgnoreCase("recipes")) {
+				return;
+			}
+			Advancement A = new Advancement(e.getPlayer().getUniqueId(), e.getAdvancement().getKey().getKey());	
+
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF(Channels.Advancement);
+			out.writeUTF(A.encode()); 
+			getServer().sendPluginMessage(self, Channels.Main, out.toByteArray());
+			
+			
+				
+
+			//	String[] Fout = FileObj.read(F);
+			//	for (String string : Fout) {
+			//		Debug.out(string);
+			//	}
+
+
+		}
+
+		
+
+	}
+
 }

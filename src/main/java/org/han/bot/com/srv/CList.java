@@ -22,7 +22,7 @@ public class CList extends ComObj {
 	@Override
 	protected String com() {
 		// TODO Auto-generated method stub
-		return "list";
+		return "status";
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class CList extends ComObj {
 		Comparator<String> cmp = (String.CASE_INSENSITIVE_ORDER).reversed().reversed();
 		keys.addAll(INFO.keySet());
 		keys.sort(cmp);
-		String res = " %U List of servers: **```";
+		String res = " %U "+BPlugin.Langsys.JDAServStatus()+": **```";
 		int i = 0;
 		for (String key : keys) {
 			ServerInfo SERVINFO = INFO.get(key);

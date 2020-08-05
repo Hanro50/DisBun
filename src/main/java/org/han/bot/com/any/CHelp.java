@@ -8,6 +8,7 @@ import org.han.bot.Print;
 import org.han.bot.com.ComLink;
 import org.han.bot.com.ComObj;
 import org.han.bot.com.Msg;
+import org.han.mc.bungee.BPlugin;
 
 public class CHelp extends ComObj {
 
@@ -38,14 +39,14 @@ public class CHelp extends ComObj {
 		Comparator<String> cmp = (String.CASE_INSENSITIVE_ORDER).reversed().reversed();
 		keys.addAll(ComLink.GetComMap().keySet());
 		keys.sort(cmp);
-		String res = " %U Help commands: **```";
+		String res = " %U "+BPlugin.Langsys.JDAhelp()+" : **```";
 		for (String key : keys) {
 			if (ComLink.iSEnable(key)) {
 				ComObj comobj = ComLink.GetComMap().get(key);
 
 				if ((all || (comobj.permlv.chk(m) && (comobj.visible.chk(m)))) && comobj.place.chk(m)) {
-					res = res + String.format("%-12s", key) + " : " + comobj.Help() + "\n";
-
+					res = res + String.format("%-12s", BPlugin.Langsys.JDAcomText(key)) + " : "
+							+ BPlugin.Langsys.JDAHelpText(key, comobj.Help()) + "\n";
 				}
 			}
 		}

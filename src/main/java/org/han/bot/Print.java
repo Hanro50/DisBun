@@ -2,25 +2,26 @@ package org.han.bot;
 
 
 import org.han.bot.com.Msg;
+import org.han.mc.bungee.BPlugin;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 public class Print {
 	static public Print Err(MessageChannel channel, User Mention, String Message) {
-		return new Print(channel, Mention, "** %U (Encountered Error) ```" + Message + "```**");
+		return new Print(channel, Mention, "** %U ("+BPlugin.Langsys.JDAFail()+") ```" + Message + "```**");
 	}
 
 	static public Print Err(Msg m,String Message) {
-		return new Print(m,"** %U (Encountered Error) ```" + Message + "```**");
+		return new Print(m,"** %U ("+BPlugin.Langsys.JDAFail()+") ```" + Message + "```**");
 	}
 
 	static public Print Suc(MessageChannel channel, User Mention) {
-		return new Print(channel, Mention, "% U Success");
+		return new Print(channel, Mention, " %U "+BPlugin.Langsys.JDASuccess() );
 	}
 
 	static public Print Suc(Msg m) {
-		return new Print(m," %U Success");
+		return new Print(m," %U "+BPlugin.Langsys.JDASuccess() );
 	}
 
 	static public Print Out(MessageChannel channel, User Mention, String Message) {

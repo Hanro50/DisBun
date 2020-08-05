@@ -18,6 +18,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,7 +52,7 @@ public class FileObj {
 
 	public static void Init(File Pfile, String Path) {
 		Root = Pfile.getName();
-		ClassPath = Pfile.getName() + "/"+Path+"/";
+		ClassPath = Pfile.getName() + "/" + Path + "/";
 		FileChk("");
 	}
 
@@ -129,6 +132,32 @@ public class FileObj {
 		} catch (Throwable e) {
 			Trace(e);
 		}
+	}
+
+	/**
+	 * Fetches a file for you from the path specified in {@link #ClassPath
+	 * ClassPath}.
+	 * 
+	 * @param Path      The path to the file relative to {@link #ClassPath
+	 *                  ClassPath}. Please run the required {@link #FileChk(String)
+	 *                  File checks} on the path provided. Make sure the Path ends
+	 *                  on "/"
+	 * @param Name      The name of the file in question. It is ran thru
+	 *                  {@link #SafeStr(String) this}
+	 * @param extention The file extension of the file in question. It is ran thru
+	 *                  {@link #SafeStr(String) this}. Do not add a dot, it's not
+	 *                  needed
+	 * @return Returns a normal java File variable
+	 * @throws URISyntaxException Checked exception thrown to indicate that a string
+	 *                            could not be parsed as a URI reference.
+	 */
+	static public File Fetch(String ResourceFileFetch) throws URISyntaxException {
+		URL res = (new FileObj()).getClass().getClassLoader().getResource(ResourceFileFetch);
+		return Paths.get(res.toURI()).toFile();
+
+		// Name = SafeStr(Name);
+		// extention = SafeStr(extention);
+		// return new File(ClassPath + Path + Name + "." + extention);
 	}
 
 	/**
@@ -434,7 +463,8 @@ public class FileObj {
 
 	/**
 	 * A wrapper for Google's Gson library. Converts a given object into a json
-	 * string. To reverse this check out {@link #fromjson(String, Class) fromjson(String, Class)}
+	 * string. To reverse this check out {@link #fromjson(String, Class)
+	 * fromjson(String, Class)}
 	 * 
 	 * @param raw The object you want to convert
 	 * @return The string the object reverts into
@@ -443,59 +473,75 @@ public class FileObj {
 		String s = builder().toJson(raw);
 		return s;
 	}
-
+	
 	static public File[] FileList(String path, String extention) {
-		final String ext = "." + SafeStr(extention);
 		File F = new File(ClassPath + path);
+		return FileList(F, extention);
+	}
+
+	static public File[] FileList(File file, String extention) {
+		final String ext = "." + SafeStr(extention);
+
 		FileFilter Ff = new FileFilter() {
 			public boolean accept(File f) {
 				return f.getName().endsWith(ext);
 			}
 		};
 
-		return F.listFiles(Ff);
+		return file.listFiles(Ff);
 	}
 
-	static public String[] FileListString(String path, String extention) throws FileNotFoundException {
+	static public File[] FileList(String path) {
+		File F = new File(ClassPath + path);
+		return FileList(F);
+	}
+
+	static public File[] FileList(File file) {
+
+		FileFilter Ff = new FileFilter() {
+			public boolean accept(File f) {
+				return true;
+			}
+		};
+		return file.listFiles(Ff);
+	}
+	
+
+	static public String[] FileListString(String path, String extention) {
 		extention = SafeStr(extention);
 		File[] FL = FileList(path, extention);
-		if (FL == null || FL.length == 0) {
-			throw new FileNotFoundException("No files in directory");
-		}
-		String[] R = new String[FL.length];
+		return FileListString(FL);
+	}
 
-		for (int i = 0; i < FL.length; i++) {
-			String T = FL[i].getName();
-			int WithoutExtLen = T.length() - extention.length() - 1;
-			R[i] = T.substring(0, WithoutExtLen);
-		}
-		return R;
+	static public String[] FileListString(File path, String extention) {
+		extention = SafeStr(extention);
+		File[] FL = FileList(path, extention);
+		return FileListString(FL);
 	}
 
 	static public String[] FileListString(String path) {
-
 		File[] FL = FileList(path);
-		if (FL == null || FL.length == 0) {
+		return FileListString(FL);
+	}
+
+	static public String[] FileListString(File file) {
+		File[] FL = FileList(file);
+		return FileListString(FL);
+	}
+
+	static public String[] FileListString(File[] FileList) {
+
+		if (FileList == null || FileList.length == 0) {
 			return new String[] { "No files found" };
 		}
-		String[] R = new String[FL.length];
+		String[] R = new String[FileList.length];
 
-		for (int i = 0; i < FL.length; i++) {
-			String T = FL[i].getName();
+		for (int i = 0; i < FileList.length; i++) {
+			String T = FileList[i].getName();
 
 			R[i] = T;
 		}
 		return R;
 	}
 
-	static public File[] FileList(String path) {
-		File F = new File(ClassPath + path);
-		FileFilter Ff = new FileFilter() {
-			public boolean accept(File f) {
-				return true;
-			}
-		};
-
-		return F.listFiles(Ff);
-	}
 }

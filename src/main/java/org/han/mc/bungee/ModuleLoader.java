@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.han.mc.bungee.module.AdvancementHandler;
 import org.han.mc.bungee.module.DisBunModule;
 import org.han.mc.bungee.module.DisBunTimerModule;
 import org.han.mc.bungee.module.Methodchanger;
@@ -25,6 +26,7 @@ public class ModuleLoader extends AbsConfig {
 		RegModule.add(new PlaceHolderapiServerSide());
 		RegModule.add(new TopicLoader());
 		RegModule.add(new PermCalc());
+		RegModule.add(new AdvancementHandler());
 	}
 
 	public ModuleLoader() {

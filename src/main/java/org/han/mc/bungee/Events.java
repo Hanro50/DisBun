@@ -4,10 +4,13 @@ import java.util.UUID;
 
 import org.han.bot.BotCon;
 import org.han.bot.JDAIN;
+import org.han.link.Channels;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
+import org.han.mc.bungee.module.AdvancementHandler;
 import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
+import org.han.mc.spigot.module.Advancement;
 import org.han.xlib.Debug;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -106,12 +109,24 @@ public class Events implements Listener {
 
 	@EventHandler
 	public void on(PluginMessageEvent event) {
-		if (!event.getTag().equalsIgnoreCase(TextMsg.Channel)) {
+		if (!event.getTag().equalsIgnoreCase(Channels.Main)) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 		String subChannel = in.readUTF();
-		if (subChannel.equalsIgnoreCase(TextMsg.SubconfigPing)) {
+		if (subChannel.equalsIgnoreCase(Channels.Advancement)) {
+			if (event.getReceiver() instanceof ProxiedPlayer) {
+				AdvancementHandler.DisplayAdvancement(Advancement.decode(in.readUTF()),
+						((ProxiedPlayer) event.getReceiver()).getServer().getInfo());
+
+			} else if (event.getReceiver() instanceof Server) {
+				AdvancementHandler.DisplayAdvancement(Advancement.decode(in.readUTF()),
+						((Server) event.getReceiver()).getInfo());
+			}
+
+		} else if (subChannel.equalsIgnoreCase(Channels.configPing))
+
+		{
 			PlaceHolderapiServerSide.SYNC();
 			// the receiver is a ProxiedPlayer when a server talks to the proxy
 			if (event.getReceiver() instanceof ProxiedPlayer) {
@@ -127,9 +142,9 @@ public class Events implements Listener {
 	static public void ConfigUpdate(ServerInfo Srv) {
 		if (BPlugin.Config.isGlobal()) {
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
-			out.writeUTF(TextMsg.Subconfig);
+			out.writeUTF(Channels.configsend);
 			out.writeUTF(BPlugin.Config.GChatFilter());
-			Srv.sendData(TextMsg.Channel, out.toByteArray());
+			Srv.sendData(Channels.Main, out.toByteArray());
 			Debug.rep("Sync call sent to " + Srv.getName());
 		}
 	}

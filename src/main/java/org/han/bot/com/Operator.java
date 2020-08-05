@@ -25,7 +25,6 @@ public class Operator {
 		T.Info.add(user.getId());
 		T.save();
 		Print.Suc(m);
-
 	}
 
 	 public static void rem(Msg m, User user) {
@@ -69,7 +68,7 @@ public class Operator {
 			File F = FileObj.Fetch("", "trusted", "json");
 			try {
 				String[] T = { FileObj.tojson(this),
-						"//Use the trust command as the bot owner to add users to this list" };
+						"\\\\Use the trust command as the bot owner to add users to this list" };
 				FileObj.writeNF(T, F, "operator file");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

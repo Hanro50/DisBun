@@ -5,9 +5,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import org.han.link.Channels;
 import org.han.link.GetDetails;
 import org.han.link.LinkUp;
-import org.han.link.TextMsg;
 import org.han.mc.bungee.BPlugin;
 import org.han.mc.bungee.ModuleLoader;
 import org.han.mc.spigot.module.Placeholderdata;
@@ -99,13 +99,13 @@ public class PlaceHolderapiServerSide extends DisBunTimerModule {
 
 		// TODO Auto-generated method stub
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF(TextMsg.Subplaceholder);
+		out.writeUTF(Channels.placeholderdata);
 		out.writeUTF(FileObj.tojson(data));
 		Debug.rep("sending data");
 
 		BPlugin.getservinfo().keySet().forEach(f -> {
 			Debug.rep("to :" + f);
-			BPlugin.getservinfo().get(f).sendData(TextMsg.Channel, out.toByteArray());
+			BPlugin.getservinfo().get(f).sendData(Channels.Main, out.toByteArray());
 		});
 		Debug.rep("Resetting data");
 		data = new Placeholderdata();

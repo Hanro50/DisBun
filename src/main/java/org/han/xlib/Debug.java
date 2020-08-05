@@ -168,12 +168,15 @@ public class Debug {
 	 */
 	protected static void info(String Line, String Type) {
 		Line = Type + " : " + Line;
+		
+		
+		
 		if (Override != null) {
 			Override.info(Line);
 			writetolog(Line);
 			return;
 		}
-
+		Line = Line.trim().replaceAll("\n", "\n"+Type + " : ");
 		String out = Format(Line, ASCII_CODES.Bright_GREEN, ASCII_CODES.Bright_WHITE, ASCII_CODES.Tab);
 		System.out.println(out);
 		writetolog(out);
@@ -218,6 +221,21 @@ public class Debug {
 			Trace(e);
 		}
 	}
+	
+	/**
+	 * Used when something goes wrong in a manner which cannot be recovered from
+	 * @param Reason Why did the crash happen 
+	 * @param e The error that  caused it.
+	 */
+	
+	public static void Crash(String Reason, Throwable e) {
+		err("CRITICAL ERROR");
+		err(Reason);
+		Trace(e);
+		System.exit(-1);
+		
+	}
+	
 
 	/**
 	 * Trace binder for debug output.

@@ -18,11 +18,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public interface TextMsg {
 	// Default stuff
-	public final static String Channel = "disbun:forward";
-	public final static String SubChannel = "DBOut";
-	public final static String SubconfigPing = "DBconfigping";
-	public final static String Subconfig = "DBconfig";
-	public final static String Subplaceholder = "DBplaceholder";
+
 
 	public static List<String> GetServ(long ChannelID) {
 		List<String> T = new ArrayList<String>();

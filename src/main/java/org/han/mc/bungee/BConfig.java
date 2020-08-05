@@ -31,6 +31,9 @@ public class BConfig extends AbsConfig {
 	static final String Networkjoin = "Networkjoin";
 	static final String Serverjoin = "Serverjoin";
 
+	
+	static final String UseExtLang = "UseExtLang";
+	static final String ExtLang = "ExtLang";
 //	static final String Placeholdersenabled = "enabled_Placeholders";
 //	static final String placeholdersUpdate = "placeholdersUpdate";
 
@@ -107,9 +110,20 @@ public class BConfig extends AbsConfig {
 
 		// Register("How often should the method the bot is showcasing be refreshed?",
 		// MethodChangerUpdate, "5");
+		
+		Register("Should this plugin use an external lang file (if a bungee update breaks this part of the plugin. This is a potential fix)",
+				UseExtLang, "false");
+		Register( "external language file(put this file in the plugin config file)", ExtLang,
+				"af.json");
 
 	}
+	public boolean UseExtLang() {
+		return boolcheck(UseExtLang);
+	}
 	
+	public String ExtLang() {
+		return get(ExtLang);
+	}
 	
 
 	public String GetToken() {
