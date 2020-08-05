@@ -9,6 +9,8 @@ import org.han.bot.Print;
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
+import com.google.gson.annotations.Expose;
+
 import net.dv8tion.jda.api.entities.User;
 
 public class Operator {
@@ -43,7 +45,7 @@ public class Operator {
 	}
 
 	static class data {
-		List<String> Info;
+		@Expose List<String> Info;
 		static data self;
 
 		static data load() {
