@@ -8,10 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.han.link.Channels;
-import org.han.mc.spigot.module.Advancement;
 import org.han.mc.spigot.module.PlaceHolderapiClientSide;
 import org.han.mc.spigot.module.Placeholderdata;
 import org.han.xlib.Debug;
@@ -21,10 +22,6 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerAdvancementDoneEvent;
-
 public class SPlugin extends JavaPlugin implements PluginMessageListener {
 	static SConfig Config;
 	static SPlugin self;
@@ -32,7 +29,7 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 
 	@Override
 	public void onEnable() {
-		self= this;
+		self = this;
 		FileObj.Root = this.getFile().getAbsolutePath();
 		FileObj.FileChkroot(this.getFile().getAbsolutePath());
 		FileObj.ClassPath = this.getDataFolder().getAbsolutePath() + "/";
@@ -49,7 +46,7 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		if (!getServer().getPluginManager().isPluginEnabled(this))
 			return;
 		getServer().getMessenger().registerIncomingPluginChannel(this, Channels.Main, this);
-		getServer().getMessenger().registerOutgoingPluginChannel(this,Channels.Main);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, Channels.Main);
 		getLogger().info("Started Spigot Component of DBcon succesfully.");
 		getServer().getPluginManager().registerEvents(new SListener(), this);
 
@@ -72,6 +69,7 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 	@Override
 	public void onDisable() {
 		getLogger().info("Stopping Spigot Component of DBcon");
+		HandlerList.unregisterAll(this);
 	}
 
 	@Override
@@ -109,32 +107,68 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		}
 	}
 
-	class SListener implements Listener {
-		@EventHandler
-		void PlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent e) {
-			if (e.getAdvancement().getKey().getKey().split("/").length<1 || e.getAdvancement().getKey().getKey().split("/")[0].equalsIgnoreCase("recipes")) {
-				return;
-			}
-			Advancement A = new Advancement(e.getPlayer().getUniqueId(), e.getAdvancement().getKey().getKey());	
-
-			ByteArrayDataOutput out = ByteStreams.newDataOutput();
-			out.writeUTF(Channels.Advancement);
-			out.writeUTF(A.encode()); 
-			getServer().sendPluginMessage(self, Channels.Main, out.toByteArray());
-			
-			
-				
-
-			//	String[] Fout = FileObj.read(F);
-			//	for (String string : Fout) {
-			//		Debug.out(string);
-			//	}
-
-
+	public static String DMTranslate(DamageCause DM) {
+		switch (DM) {
+		case BLOCK_EXPLOSION: // BLOCK_EXPLOSION("death.attack.explosion"),
+			return "death.attack.explosion";
+		case CONTACT: // CONTACT("death.attack.generic.player"),
+			return "death.attack.cactus";
+		case CRAMMING: // CRAMMING("death.attack.cramming"),
+			return "death.attack.cramming";
+		default:
+		case CUSTOM: // CUSTOM("%1$s died"),
+			return "death.attack.generic";
+		case DRAGON_BREATH: // DRAGON_BREATH("death.attack.dragonBreath"),
+			return "death.attack.dragonBreath";
+		case DROWNING: // DROWNING("death.attack.drown"),
+			return "death.attack.drown";
+		case DRYOUT:
+			return "death.attack.drown";
+		case ENTITY_ATTACK: // ENTITY_ATTACK("death.attack.mob"),
+			return "death.attack.mob";
+		case ENTITY_EXPLOSION: // ENTITY_EXPLOSION("death.attack.explosion.player"),
+			return "death.attack.explosion";
+		case ENTITY_SWEEP_ATTACK:
+			return "death.attack.player";
+		case FALL: // FALL("death.attack.fall"),
+			return "death.attack.fall";
+		case FALLING_BLOCK: // FALLING_BLOCK("death.attack.fallingBlock"),
+			return "death.attack.anvil";
+		case FIRE: // FIRE("death.attack.inFire"),
+			return "death.attack.inFire";
+		case FIRE_TICK: // FIRE_TICK("death.attack.onFire"),
+			return "death.attack.onFire";
+		case FLY_INTO_WALL: // FLY_INTO_WALL("death.attack.flyIntoWall"),
+			return "death.attack.flyIntoWall";
+		case HOT_FLOOR: // HOT_FLOOR("death.attack.hotFloor"),
+			return "death.attack.hotFloor";
+		case LAVA: // LAVA("death.attack.lava"),
+			return "death.attack.lava";
+		case LIGHTNING: // LIGHTNING("death.attack.lightningBolt"),
+			return "death.attack.lightningBolt";
+		case MAGIC: // MAGIC("death.attack.magic"),
+			return "death.attack.magic";
+		case MELTING: // MELTING("death.attack.generic"),
+			return "death.attack.generic";
+		case POISON: // POISON("death.attack.magic"),
+			return "death.attack.magic";
+		case PROJECTILE: // PROJECTILE("death.attack.arrow"),
+			return "death.attack.arrow";
+		case STARVATION: // STARVATION("death.attack.starve"),
+			return "death.attack.starve";
+		case SUFFOCATION: // SUFFOCATION("death.attack.inWall"),
+			return "death.attack.inWall";
+		case SUICIDE: // SUICIDE("death.attack.even_more_magic"),
+			return "death.attack.even_more_magic";
+		case THORNS: // THORNS("death.attack.thorns"),
+			return "death.attack.thorns";
+		case VOID: // VOID("death.attack.outOfWorld"),
+			return "death.attack.outOfWorld";
+		case WITHER: // WITHER("death.attack.wither"),
+			return "death.attack.wither";
 		}
 
-		
-
+		// return "death.attack.generic";
 	}
 
 }

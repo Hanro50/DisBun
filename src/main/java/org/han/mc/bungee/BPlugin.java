@@ -13,7 +13,6 @@ import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.com.*;
-
 import org.han.xlib.Debug;
 import org.han.xlib.FileObj;
 
@@ -34,13 +33,20 @@ public class BPlugin extends Plugin {
 	public static void main(String[] w) {
 		FileObj.Init();
 		Debug.boot(w);
-
+		//DeathMessage D =new DeathMessage(new vector3<Double>(5D, 5D, 5D));
+		//Debug.out(D.encode());
+		//Debug.out(DeathMessage.decode(D.encode()).deathpos.tostring());
 		Config = new BConfig();
 
 		Debug.out(Config.GetToken());
 
 		BotCon.Start();
 		JDAIN T = new JDAIN();
+		
+		
+				//vec<Double>.D3(5D, 5D, 5D));
+		
+		
 		try {
 			BotCon.getJDA().awaitReady();
 
@@ -112,10 +118,6 @@ public class BPlugin extends Plugin {
 	@Override
 	public void onLoad() {
 		Self = this;
-		
-		
-		
-		
 		getProxy().registerChannel(Channels.Main);
 		getProxy().getPluginManager().registerListener(this, new Events());
 		getProxy().getPluginManager().registerCommand(this, new Linkcom());

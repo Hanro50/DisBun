@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.han.mc.bungee.module.AdvancementHandler;
+import org.han.mc.bungee.module.DeathMessageHandler;
 import org.han.mc.bungee.module.DisBunModule;
 import org.han.mc.bungee.module.DisBunTimerModule;
 import org.han.mc.bungee.module.Methodchanger;
@@ -22,11 +23,13 @@ public class ModuleLoader extends AbsConfig {
 	public static List<DisBunModule> RegModule = new ArrayList<DisBunModule>();
 	static final String Version = "Version";
 	static {
+		RegModule.clear();
 		RegModule.add(new Methodchanger());
 		RegModule.add(new PlaceHolderapiServerSide());
 		RegModule.add(new TopicLoader());
 		RegModule.add(new PermCalc());
 		RegModule.add(new AdvancementHandler());
+		RegModule.add(new DeathMessageHandler());
 	}
 
 	public ModuleLoader() {

@@ -51,6 +51,31 @@ public class LangLoader {
 		return LangMap.getOrDefault("advancements." + AdvID.replace("/", ".") + ".description", "Translation error");
 	}
 
+	public String GetDM_title(String DMID, boolean Checkplr, boolean item) {
+		if (Checkplr && item) {
+			String F = LangMap.get(DMID.toLowerCase() + ".player.item");
+			if (F != null)
+				return F;
+		}
+		
+		if (item) {
+			String F = LangMap.get(DMID.toLowerCase() + ".item");
+			if (F != null)
+				return F;
+		}
+		
+		if (Checkplr) {
+			String F = LangMap.get(DMID.toLowerCase() + ".player");
+			if (F != null)
+				return F;
+		}
+		return LangMap.getOrDefault( DMID, DMID);
+	}
+
+	public String GetEntity(String type) {
+		return LangMap.getOrDefault("entity.minecraft." + type.toLowerCase(), type);
+	}
+
 	public String StringJoinText() {
 		return LangMap.getOrDefault("multiplayer.player.joined", "%s joined the game");
 
@@ -74,23 +99,27 @@ public class LangLoader {
 	}
 
 	public String JDAHelpText(String com, String DefaultHelpText) {
-		return LangMap.getOrDefault("disbun.com."+com+".helptext", DefaultHelpText);
+		return LangMap.getOrDefault("disbun.com." + com + ".helptext", DefaultHelpText);
 	}
+
 	public String JDAcomText(String com) {
-		return LangMap.getOrDefault("disbun.com."+com+".com", com);
+		return LangMap.getOrDefault("disbun.com." + com + ".com", com);
 	}
-	//command.failed
+
+	// command.failed
 	public String JDAFail() {
 		return LangMap.getOrDefault("command.failed", "An unexpected error occurred trying to execute that command");
 	}
+
 	public String JDASuccess() {
 		return LangMap.getOrDefault("disbun.success", "Success");
 	}
-	 //"options.title"
+
+	// "options.title"
 	public String JDAServStatus() {
 		return LangMap.getOrDefault("multiplayer.status.request_handled", "Status request has been handled");
 	}
-	
+
 	public String JDAhelp() {
 		return LangMap.getOrDefault("options.title", "Options");
 	}

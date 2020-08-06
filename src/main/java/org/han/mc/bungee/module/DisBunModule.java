@@ -8,6 +8,7 @@ public abstract class DisBunModule {
 	public abstract void load(ModuleLoader  Loader);
 	public abstract void deload();
 	public boolean enabled =false;
+	int LastHash;
 	/**
 	 * Fired to add options to the loader module
 	 */

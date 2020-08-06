@@ -9,5 +9,5 @@ public class Channels {
 	
 	public final static String Advancement =  "DBAdvancement";
 	
-	
+	public final static String DeathMessage =  "DBDeathMessage";
 }

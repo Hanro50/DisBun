@@ -19,7 +19,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 
 public class AdvancementHandler extends DisBunModule {
 	static AdvancementHandler self;
-
+	
 	@Override
 	public String HelpText() {
 		// TODO Auto-generated method stub
@@ -39,9 +39,17 @@ public class AdvancementHandler extends DisBunModule {
 
 	private void Display(Advancement base, ServerInfo serv) {
 		if (enabled) {
+			if (LastHash == base.hashCode() ) {
+				Debug.err("Running the same message twice? This ain't right...");
+				return;
+			}
+			LastHash = base.hashCode();
+			
+			
 			List<Long> chnidlist = TextMsg.GetChn(serv.getName());
 			String ICON = null;
 			String PlayerName = null;
+			 base.hashCode();
 
 			String L = LinkUp.GetDiscordID(base.PlayerID);
 			if (L != null) {

@@ -8,9 +8,11 @@ import org.han.link.Channels;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.module.AdvancementHandler;
+import org.han.mc.bungee.module.DeathMessageHandler;
 import org.han.mc.bungee.module.PlaceHolderapiServerSide;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.mc.spigot.module.Advancement;
+import org.han.mc.spigot.module.DeathMessage;
 import org.han.xlib.Debug;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -123,7 +125,17 @@ public class Events implements Listener {
 				AdvancementHandler.DisplayAdvancement(Advancement.decode(in.readUTF()),
 						((Server) event.getReceiver()).getInfo());
 			}
+		}else if(subChannel.equalsIgnoreCase(Channels.DeathMessage)) {
+			if (event.getReceiver() instanceof ProxiedPlayer) {
+				DeathMessageHandler.DisplayDeathMessage(DeathMessage.decode(in.readUTF()),
+						((ProxiedPlayer) event.getReceiver()).getServer().getInfo());
 
+			} else if (event.getReceiver() instanceof Server) {
+				DeathMessageHandler.DisplayDeathMessage(DeathMessage.decode(in.readUTF()),
+						((Server) event.getReceiver()).getInfo());
+			}
+			
+			
 		} else if (subChannel.equalsIgnoreCase(Channels.configPing))
 
 		{
