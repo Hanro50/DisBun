@@ -1,5 +1,6 @@
 package org.han.mc.spigot.module;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.han.xlib.FileObj;
@@ -23,12 +24,17 @@ public class DeathMessage {
 	@Expose 
 	public String Weapon;
 	@Expose 
+	public Map<String,Integer> Enchantments;
+	@Expose 
 	public long Creationdate;
+
+	
+	
 	public DeathMessage() {
 
 	}
 
-	public DeathMessage(vector3<Double> pos, String DM, String MobName, UUID Victem, UUID Attacker,float XP, String Weapon) {
+	public DeathMessage(vector3<Double> pos, String DM, String MobName, UUID Victem, UUID Attacker,float XP, String Weapon,Map<String,Integer> Enchantments) {
 		this.Deathpos = pos;
 		this.DeathMsg = (DM);
 		this.MobName = MobName;
@@ -37,6 +43,7 @@ public class DeathMessage {
 		this.XP = XP;
 		this.Weapon = Weapon;
 		this.Creationdate = System.nanoTime();
+		this.Enchantments = Enchantments;
 	}
 
 	public String encode() {

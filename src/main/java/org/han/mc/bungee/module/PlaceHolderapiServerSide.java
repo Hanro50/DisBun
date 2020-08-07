@@ -52,7 +52,7 @@ public class PlaceHolderapiServerSide extends DisBunTimerModule {
 	public static void add(UUID UserID, String NickName, String NickNameClr, String toprole) {
 		if (self.enabled) {
 			if (!(UserID == null || NickName == null || NickNameClr == null || toprole == null))
-				data.Add(self,UserID, NickName, NickNameClr, toprole);
+				data.Add(self,UserID, NickName, ChatColor.of(NickNameClr).toString(), toprole);
 		}
 	}
 

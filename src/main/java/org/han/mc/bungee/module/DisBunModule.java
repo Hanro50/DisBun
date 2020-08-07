@@ -13,4 +13,5 @@ public abstract class DisBunModule {
 	 * Fired to add options to the loader module
 	 */
 	public abstract void AdCon(ModuleLoader  Loader);
+	public ModuleLoader Loader;
 }

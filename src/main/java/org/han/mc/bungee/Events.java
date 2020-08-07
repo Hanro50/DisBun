@@ -61,7 +61,9 @@ public class Events implements Listener {
 			} else if (!event.isCancelled()) {
 				JoinMessages.serverjoin(event.getTarget(), player);
 			}
-			PermCalc.self.UpdatePerms(player);
+			if (PermCalc.self != null) {
+				PermCalc.self.UpdatePerms(player);
+			}
 		}
 
 	}
@@ -125,7 +127,7 @@ public class Events implements Listener {
 				AdvancementHandler.DisplayAdvancement(Advancement.decode(in.readUTF()),
 						((Server) event.getReceiver()).getInfo());
 			}
-		}else if(subChannel.equalsIgnoreCase(Channels.DeathMessage)) {
+		} else if (subChannel.equalsIgnoreCase(Channels.DeathMessage)) {
 			if (event.getReceiver() instanceof ProxiedPlayer) {
 				DeathMessageHandler.DisplayDeathMessage(DeathMessage.decode(in.readUTF()),
 						((ProxiedPlayer) event.getReceiver()).getServer().getInfo());
@@ -134,11 +136,8 @@ public class Events implements Listener {
 				DeathMessageHandler.DisplayDeathMessage(DeathMessage.decode(in.readUTF()),
 						((Server) event.getReceiver()).getInfo());
 			}
-			
-			
-		} else if (subChannel.equalsIgnoreCase(Channels.configPing))
 
-		{
+		} else if (subChannel.equalsIgnoreCase(Channels.configPing)) {
 			PlaceHolderapiServerSide.SYNC();
 			// the receiver is a ProxiedPlayer when a server talks to the proxy
 			if (event.getReceiver() instanceof ProxiedPlayer) {
@@ -147,8 +146,10 @@ public class Events implements Listener {
 
 			} else if (event.getReceiver() instanceof Server) {
 				ConfigUpdate(((Server) event.getReceiver()).getInfo());
+		
 			}
 		}
+
 	}
 
 	static public void ConfigUpdate(ServerInfo Srv) {

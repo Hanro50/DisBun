@@ -40,7 +40,7 @@ public class LangLoader {
 		}
 		Debug.err("Could not load language support");
 		return new LangLoader();
-	}
+	}//"advancements.toast.task"
 
 	public String GetAdvancement_title(String AdvID) {
 		return LangMap.getOrDefault("advancements." + AdvID.replace("/", ".") + ".title",
@@ -49,6 +49,18 @@ public class LangLoader {
 
 	public String GetAdvancement_Disc(String AdvID) {
 		return LangMap.getOrDefault("advancements." + AdvID.replace("/", ".") + ".description", "Translation error");
+	}
+	
+	public String GetAdvancement_Root_title(String type) {
+		return LangMap.getOrDefault("advancements." + type+ ".root.title", "Translation error");
+	}
+	
+	public String GetAdvancement_Root_Disc(String type) {
+		return LangMap.getOrDefault("advancements." + type+ ".root.description", "Translation error");
+	}
+	
+	public String GetAdvancement_toast() {
+		return LangMap.getOrDefault("advancements.toast.task","Advancement Made!");
 	}
 
 	public String GetDM_title(String DMID, boolean Checkplr, boolean item) {
@@ -73,7 +85,7 @@ public class LangLoader {
 	}
 
 	public String GetEntity(String type) {
-		return LangMap.getOrDefault("entity.minecraft." + type.toLowerCase(), type);
+		return LangMap.getOrDefault( type.toLowerCase(), type);
 	}
 
 	public String StringJoinText() {
@@ -122,6 +134,17 @@ public class LangLoader {
 
 	public String JDAhelp() {
 		return LangMap.getOrDefault("options.title", "Options");
+	}
+	
+	public String EnchantmentName(String Enchantment) {
+		return LangMap.getOrDefault("enchantment.minecraft." + Enchantment, Enchantment);
+	}
+	public String EnchantmentLevel(int Enchlv) {
+		return LangMap.getOrDefault("enchantment.level." + Enchlv, ""+Enchlv);
+	}
+	
+	public String GetGameOver() {
+		return LangMap.getOrDefault("deathScreen.title.hardcore","Game over!");
 	}
 }
 //"chat.type.advancement.task": "%s has made the advancement %s"

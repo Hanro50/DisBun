@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.md_5.bungee.api.ChatColor;
 
 public class JDAListener extends ListenerAdapter {
 	TextMsg T = new BungeeIN();
@@ -69,10 +70,9 @@ public class JDAListener extends ListenerAdapter {
 				color = Color.white;
 			}
 
-			role = new RoleObj(m.Sender.Member.getRoles().get(0).getName(),
-					"#" + Integer.toHexString(color.getRGB()).substring(2));
+			role = new RoleObj(m.Sender.Member.getRoles().get(0).getName(), ChatColor.of(color).toString());
 		} else {
-			role = new RoleObj("", "#" + Integer.toHexString(Color.white.getRGB()).substring(2));
+			role = new RoleObj("", ChatColor.WHITE.toString());
 		}
 
 		T.sendfromJDA(m.Channel.getIdLong(), m.Sender.Member.getEffectiveName(), m.Sender.User.getId(),

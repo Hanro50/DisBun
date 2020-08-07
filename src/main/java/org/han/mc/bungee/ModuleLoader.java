@@ -5,13 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.han.mc.bungee.module.AdvancementHandler;
-import org.han.mc.bungee.module.DeathMessageHandler;
-import org.han.mc.bungee.module.DisBunModule;
-import org.han.mc.bungee.module.DisBunTimerModule;
-import org.han.mc.bungee.module.Methodchanger;
-import org.han.mc.bungee.module.PlaceHolderapiServerSide;
-import org.han.mc.bungee.module.TopicLoader;
+import org.han.mc.bungee.module.*;
 import org.han.mc.bungee.module.Perms.lucky.PermCalc;
 import org.han.xlib.AbsConfig;
 import org.han.xlib.Debug;
@@ -48,6 +42,7 @@ public class ModuleLoader extends AbsConfig {
 						((DisBunTimerModule) disBunModule).DefaultTime() + "");
 			}
 			disBunModule.AdCon(this);
+			
 			} catch (Exception e) {
 				Debug.err(disBunModule.getClass().getName() + ":Contains an error. Please report this to the appropriate dev...");
 				Debug.Trace(e);
@@ -62,6 +57,7 @@ public class ModuleLoader extends AbsConfig {
 					disBunModule.deload();
 				}
 				disBunModule.load(this);
+				disBunModule.Loader = this;
 			}
 		}
 	}

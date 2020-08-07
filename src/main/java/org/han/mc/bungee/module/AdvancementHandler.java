@@ -19,7 +19,8 @@ import net.md_5.bungee.api.config.ServerInfo;
 
 public class AdvancementHandler extends DisBunModule {
 	static AdvancementHandler self;
-	
+	static final String ShowDisc = "show.description";
+
 	@Override
 	public String HelpText() {
 		// TODO Auto-generated method stub
@@ -39,17 +40,16 @@ public class AdvancementHandler extends DisBunModule {
 
 	private void Display(Advancement base, ServerInfo serv) {
 		if (enabled) {
-			if (LastHash == base.hashCode() ) {
+			if (LastHash == base.hashCode()) {
 				Debug.err("Running the same message twice? This ain't right...");
 				return;
 			}
 			LastHash = base.hashCode();
-			
-			
+
 			List<Long> chnidlist = TextMsg.GetChn(serv.getName());
 			String ICON = null;
 			String PlayerName = null;
-			 base.hashCode();
+			base.hashCode();
 
 			String L = LinkUp.GetDiscordID(base.PlayerID);
 			if (L != null) {
@@ -69,34 +69,40 @@ public class AdvancementHandler extends DisBunModule {
 
 			String Type = "";
 			if (base.AchievementID.split("/").length >= 1) {
-				Type = "(" + base.AchievementID.split("/")[0] + ")";
+				Type = base.AchievementID.split("/")[0];
 			}
 			String Title = BPlugin.Langsys.GetAdvancement_title(base.AchievementID);
-			String Disc = BPlugin.Langsys.GetAdvancement_Disc(base.AchievementID);
+			String Disc = "";
+			if (Loader.ChkBool(this, ShowDisc))
+				Disc = BPlugin.Langsys.GetAdvancement_Disc(base.AchievementID);
 			Color Clr = new Color(128, 128, 128);
-			if (Type.equals("(recipes)")) {
+			if (Type.equals("recipes")) {
 				Debug.err(
 						"Recipy advancements aren't being blocked by the spigot portion of this plugin again...please report");
 				return;
-			} else if (Type.equals("(story)"))
+			} else if (Type.equals("story"))
 				Clr = Color.green;
-			else if (Type.equals("(nether)"))
+			else if (Type.equals("nether"))
 				Clr = Color.red;
-			else if (Type.equals("(end)"))
+			else if (Type.equals("end"))
 				Clr = new Color(139, 0, 139);
-			else if (Type.equals("(husbandry)"))
+			else if (Type.equals("husbandry"))
 				Clr = Color.yellow;
-			else if (Type.equals("(adventure)"))
+			else if (Type.equals("adventure"))
 				Clr = Color.orange;
+
+			Type = BPlugin.Langsys.GetAdvancement_Root_title(Type) + " : "
+					+ BPlugin.Langsys.GetAdvancement_Root_Disc(Type);
 
 			for (long f : chnidlist) {
 				try {
 					TextChannel CHL = GetDetails.getGuild().getTextChannelById(f);
 					if (CHL != null) {
 						try {
-							MessageEmbed E = new EmbedBuilder().setAuthor(PlayerName, null, ICON)
-									.setTitle(String.format(BPlugin.Langsys.StringadvancementtaskText(), "",
-											"[" + Title + "]")) //
+							MessageEmbed E = new EmbedBuilder()
+									.setAuthor(BPlugin.Langsys.GetAdvancement_toast(), null, ICON)
+									.setTitle(String.format(BPlugin.Langsys.StringadvancementtaskText(), PlayerName,
+											"[**" + Title + "**]")) //
 									.setColor(Clr).setDescription(Disc).setFooter(Type).build();
 							CHL.sendMessage(E).queue();
 						} catch (net.dv8tion.jda.api.exceptions.InsufficientPermissionException e) {
@@ -129,7 +135,7 @@ public class AdvancementHandler extends DisBunModule {
 	@Override
 	public void AdCon(ModuleLoader Loader) {
 		// TODO Auto-generated method stub
-
+		Loader.regSettings(this, "Show the description when a player makes an advancement", ShowDisc, "true");
 	}
 
 }

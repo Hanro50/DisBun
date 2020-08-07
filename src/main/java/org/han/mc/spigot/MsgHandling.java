@@ -15,7 +15,6 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.annotations.Expose;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.md_5.bungee.api.ChatColor;
 
 public class MsgHandling {
 	public static void Message(ByteArrayDataInput Message, Server Srv) {
@@ -36,8 +35,8 @@ public class MsgHandling {
 
 		if (Output.contains("%DiscordColour%") || Output.contains("%DiscordColor%")) {
 			try {
-				Output = Output.replaceAll("%DiscordColour%", ChatColor.of(F.role.Color).toString());
-				Output = Output.replaceAll("%DiscordColor%", ChatColor.of(F.role.Color).toString());
+				Output = Output.replaceAll("%DiscordColour%", F.role.Color);
+				Output = Output.replaceAll("%DiscordColor%", F.role.Color);
 			} catch (StringIndexOutOfBoundsException e) {
 				Debug.Trace(e);
 				Debug.out(F.role.Color + "");

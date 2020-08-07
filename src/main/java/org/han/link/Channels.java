@@ -6,8 +6,6 @@ public class Channels {
 	public final static String configPing = "DBconfigping";
 	public final static String configsend = "DBconfig";
 	public final static String placeholderdata = "DBplaceholder";
-	
 	public final static String Advancement =  "DBAdvancement";
-	
 	public final static String DeathMessage =  "DBDeathMessage";
 }

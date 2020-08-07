@@ -15,8 +15,6 @@ public class Advancement {
 		this.AchievementID = AchievementID;
 		this.Creationdate = System.nanoTime();
 	}
-	
-	
 	public String encode() {
 		return FileObj.tojson(this);
 	}

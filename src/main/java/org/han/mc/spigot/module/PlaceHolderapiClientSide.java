@@ -1,11 +1,11 @@
 package org.han.mc.spigot.module;
 
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.han.mc.spigot.SPlugin;
 import org.han.xlib.Debug;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.md_5.bungee.api.ChatColor;
 
 public class PlaceHolderapiClientSide extends PlaceholderExpansion {
 	public static Placeholderdata data;
@@ -113,7 +113,7 @@ public class PlaceHolderapiClientSide extends PlaceholderExpansion {
 		// %someplugin_placeholder2%
 		if (identifier.equals("DiscordColour")) {
 			if (data != null && data.internaldata.containsKey(player.getUniqueId())) {
-				return ChatColor.of(data.internaldata.get(player.getUniqueId()).NickNameClr).toString();
+				return data.internaldata.get(player.getUniqueId()).NickNameClr;
 			}
 			return ChatColor.WHITE.toString();
 		}
