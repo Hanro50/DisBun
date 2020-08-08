@@ -8,7 +8,6 @@ import org.han.bot.Print;
 import org.han.bot.com.ComLink;
 import org.han.bot.com.ComObj;
 import org.han.bot.com.Msg;
-import org.han.mc.bungee.BPlugin;
 
 public class CHelp extends ComObj {
 
@@ -29,6 +28,8 @@ public class CHelp extends ComObj {
 		return "The help command";
 	}
 
+	static String Header = "header";
+
 	@Override
 	public void Run(Msg m) {
 		// TODO Auto-generated method stub
@@ -39,14 +40,14 @@ public class CHelp extends ComObj {
 		Comparator<String> cmp = (String.CASE_INSENSITIVE_ORDER).reversed().reversed();
 		keys.addAll(ComLink.GetComMap().keySet());
 		keys.sort(cmp);
-		String res = " %U "+BPlugin.Langsys.JDAhelp()+" : **```";
+		String res = Handler.ChkStr(this, Header) + " : **```";
 		for (String key : keys) {
 			if (ComLink.iSEnable(key)) {
 				ComObj comobj = ComLink.GetComMap().get(key);
 
 				if ((all || (comobj.permlv.chk(m) && (comobj.visible.chk(m)))) && comobj.place.chk(m)) {
-					res = res + String.format("%-12s", BPlugin.Langsys.JDAcomText(key)) + " : "
-							+ BPlugin.Langsys.JDAHelpText(key, comobj.Help()) + "\n";
+					res = res + String.format("%-12s", Handler.ChkStr(this, ComLink.Langcom)) + " : "
+							+ Handler.ChkStr(this, ComLink.helptxt) + "\n";
 				}
 			}
 		}
@@ -54,4 +55,10 @@ public class CHelp extends ComObj {
 		Print.Out(m, res);
 	}
 
+	ComLink Handler;
+
+	public void Adcon(ComLink Handler) {
+		this.Handler = Handler;
+		Handler.regSettings(this, "Help header ( %U Will be replaced with a user mention)", Header, " %U command list");
+	}
 }

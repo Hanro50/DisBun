@@ -105,8 +105,8 @@ public class DeathMessageHandler extends DisBunModule {
 			List<Long> chnidlist = TextMsg.GetChn(serv.getName());
 			String ICON = (Vic == null ? "https://crafatar.com/avatars/" + base.Victem.toString()
 					: Vic.getUser().getAvatarUrl());
-			Color Clr = Color.black;
-
+			Color Clr = new Color(0, 127, 255);
+			
 			String Weapon = base.Weapon == null ? "Translation error" : base.Weapon;
 			vicName = MarkdownSanitizer.escape(vicName);
 			BaseStr = MarkdownSanitizer.escape(BaseStr);

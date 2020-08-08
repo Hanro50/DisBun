@@ -10,14 +10,7 @@ import org.han.mc.bungee.module.Perms.lucky.PermCalc;
  *
  */
 public abstract class ComObj {
-	// public enum Type {
-	// React() {@Override public String getCom(String com) {return com;}public
-	// Boolean isEmotCom() {return false;}},
-	// Text() {@Override public String getCom(String com) {return
-	// com.toLowerCase().trim();}};
-	// public String getCom(String com) {return null;}
-	// public Boolean isEmotCom() {return false;}
-	// }
+	public void Adcon(ComLink Handler) {}
 
 	/**
 	 * The place where this command can be used. </br>
@@ -161,4 +154,6 @@ public abstract class ComObj {
 	public String getCom() {
 		return com().toLowerCase().trim().replaceAll(" ", "_");
 	}
+	
+
 }

@@ -109,29 +109,25 @@ public class LangLoader {
 	public String StringadvancementtaskText() {
 		return LangMap.getOrDefault("chat.type.advancement.task", "%s has made the advancement %s");
 	}
-
+	@Deprecated
 	public String JDAHelpText(String com, String DefaultHelpText) {
 		return LangMap.getOrDefault("disbun.com." + com + ".helptext", DefaultHelpText);
 	}
-
+	@Deprecated
 	public String JDAcomText(String com) {
 		return LangMap.getOrDefault("disbun.com." + com + ".com", com);
 	}
 
 	// command.failed
+	@Deprecated
 	public String JDAFail() {
 		return LangMap.getOrDefault("command.failed", "An unexpected error occurred trying to execute that command");
 	}
-
+	@Deprecated
 	public String JDASuccess() {
 		return LangMap.getOrDefault("disbun.success", "Success");
 	}
-
-	// "options.title"
-	public String JDAServStatus() {
-		return LangMap.getOrDefault("multiplayer.status.request_handled", "Status request has been handled");
-	}
-
+	@Deprecated
 	public String JDAhelp() {
 		return LangMap.getOrDefault("options.title", "Options");
 	}

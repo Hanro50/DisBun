@@ -15,7 +15,23 @@ import org.han.xlib.FileObj;
 
 public class ComLink extends AbsConfig {
 	static ComLink Self;
-	static final String Version = "Version";
+	final static String Version = "Version";
+	public final static String Langcom = ".com";
+	public final static String helptxt = ".helptxt";
+	public final static String Success = "print.success";
+	public final static String Error = "print.error";
+
+	public static String getsuccess() {
+		if (Self != null)
+			return Self.get(Success);
+		return " %U Success";
+	}
+
+	public static String geterror() {
+		if (Self != null)
+			return Self.get(Success);
+		return " %U Error";
+	}
 
 	private ComLink() {
 		super(FileObj.Fetch("", "Discord_Config", "txt"));
@@ -25,9 +41,15 @@ public class ComLink extends AbsConfig {
 			Register("Version of this file\n Do not edit", Version, "0.0.0");
 		// TODO Auto-generated constructor stub
 
+		Register("Success text ( %U Will be replaced with a user mention)", Success, " %U Success");
+		Register("Error text ( %U Will be replaced with a user mention)", Error, " %U Error");
+
 		Coms.keySet().forEach(f -> {
-			Register("Enable the " + f + " command", "com." + f, "true");
-			remap.put(BPlugin.Langsys.JDAcomText(f), f);
+			Register("Enable the " + f + " command", f + ".enable", "true");
+			Register("Chang the command for the " + f + " command", f + Langcom, Coms.get(f).getCom());
+			Register("Chang the helptext for the " + f + " command", f + helptxt, Coms.get(f).Help());
+			Coms.get(f).Adcon(this);
+			remap.put(get(f + Langcom), f);
 		});
 
 	}
@@ -73,7 +95,7 @@ public class ComLink extends AbsConfig {
 	public static final Map<String, ComObj> GetComMap() {
 		return Coms;
 	}
-	
+
 	private Map<String, String> remap = new HashMap<String, String>();
 
 	public static void RegCom(ComObj Com) {
@@ -99,8 +121,7 @@ public class ComLink extends AbsConfig {
 			return;
 		String com = Self.remap.get(m.getCom());
 		if (Coms.containsKey(com)) {
-			
-			
+
 			if (!iSEnable(m.getCom())) {
 				Print.Err(m, "This command has been disabled by the operator");
 				return;
@@ -114,4 +135,25 @@ public class ComLink extends AbsConfig {
 			}
 		}
 	}
+
+	public void regSettings(ComObj module, String HelpText, String Setting, String DefaultValue) {
+		Register(HelpText, module.com() + "." + Setting, DefaultValue);
+	}
+
+	public String ChkStr(ComObj module, String Setting) {
+		return get(module.com() + "." + Setting);
+	}
+
+	public boolean ChkBool(ComObj module, String Setting) {
+		return boolcheck(module.com() + "." + Setting);
+	}
+
+	public int ChkInt(ComObj module, String Setting, int DefaultVal) {
+		return Valuecheck(module.com() + "." + Setting, DefaultVal);
+	}
+
+	public void edit(ComObj module, String Setting, String NewVal) {
+		edit(module.com() + "." + Setting, NewVal);
+	}
+
 }
