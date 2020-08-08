@@ -180,6 +180,15 @@ public class FileObj {
 		extention = SafeStr(extention);
 		return new File(ClassPath + Path + Name + "." + extention);
 	}
+	/**
+	 * Fetches a file based on a path
+	 * @param Path the path to the file
+	 * @return the file itself
+	 */
+	
+	static public File Fetchfile(String Path) {
+		return new File(ClassPath + Path );
+	}
 
 	/**
 	 * Uses {@link #Fetch(String,String,String) the Fetch} function to get a file

@@ -1,5 +1,5 @@
 ﻿name: DisBun
 main: org.han.mc.spigot.SPlugin
-version: 0.0.9-Snapshot
+version: 0.0.10-Snapshot
 author: Hanro50
 softdepend: [PlaceholderAPI] # This is used, if your plugin works without PlaceholderAPI.

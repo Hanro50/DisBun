@@ -14,25 +14,77 @@ import com.google.gson.annotations.Expose;
 public class LangLoader {
 	@Expose
 	Map<String, String> LangMap;
+	final static String Lang = "lang/";
 
 	public static LangLoader Load() {
 		if (!BPlugin.Config.UseExtLang()) {
+			if (!FileObj.Fetchfile(Lang).exists()) {
+				try {
+					Debug.out("Copying internal language files into config files");
+					FileObj.FileChk(Lang);
+					InputStream stream = BPlugin.Self.getResourceAsStream(Lang + "1filelist.txt");
+
+					String content = new String(ByteStreams.toByteArray(stream));
+					stream.close();
+					for (String file : content.split("\n")) {
+						InputStream INPUT = BPlugin.Self.getResourceAsStream(Lang+file+".json");
+						String[] lines = new String(ByteStreams.toByteArray(INPUT)).split("\n");
+						FileObj.write(lines, FileObj.Fetch(Lang, file, "json"), "language files");  
+						INPUT.close();
+					}
+					
+					
+				} catch (IOException e) {
+				}
+
+				// File f = new
+				// File(BPlugin.Self.getClass().getClassLoader().getResource("lang/en_us.json").getFile());
+				// Debug.out(f + "");
+				// File f = new
+				// File(BPlugin.Self.getClass().getClassLoader().getResource(Lang).getFile());
+
+				/// for (File out : f.listFiles()) {
+				/// File in = FileObj.Fetch(Lang, out.getName(), "json");
+				// try {
+				// FileObj.write(FileObj.read(f), in, "language file");
+				// } catch (IOException e) {
+				// }
+				// }
+
+			}
+
 			try {
 				InputStream stream = BPlugin.getproxyserv().getClass()
 						.getResourceAsStream("/mojang-translations/en_us.json");
 				String content;
 				content = new String(ByteStreams.toByteArray(stream));
+				stream.close();
 				return FileObj.fromjson("{\"LangMap\":" + content.replaceAll("\n", "") + "}", LangLoader.class);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Debug.Trace(e);
+			} catch (IOException | NullPointerException e) {
+				try {
+					// TODO Auto-generated catch block
+					Debug.err("Wait this isn't bungee, loading internal version of language file?");
+					InputStream stream = BPlugin.Self.getResourceAsStream("lang/en_us.json");
+					String content = new String(ByteStreams.toByteArray(stream));
+					stream.close();
+					return FileObj.fromjson("{\"LangMap\":" + content.replaceAll("\n", "") + "}", LangLoader.class);
+				} catch (IOException | NullPointerException e1) {
+					// TODO Auto-generated catch block
+					Debug.err("INTERNAL LANGUAGE CLASS FAILURE");
+					Debug.err("Things are about to get messy");
+					Debug.err("Please provide an external language file to fix this error");
+					Debug.Trace(e);
+					Debug.Trace(e1);
+
+				}
+
 			}
 
 		}
 
 		try {
 			return FileObj.fromjson(
-					"{\"LangMap\":" + FileObj.read(FileObj.Fetch("", BPlugin.Config.ExtLang(), "json"), "") + "}",
+					"{\"LangMap\":" + FileObj.read(FileObj.Fetch(Lang, BPlugin.Config.ExtLang(), "json"), "") + "}",
 					LangLoader.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,7 +92,7 @@ public class LangLoader {
 		}
 		Debug.err("Could not load language support");
 		return new LangLoader();
-	}//"advancements.toast.task"
+	}// "advancements.toast.task"
 
 	public String GetAdvancement_title(String AdvID) {
 		return LangMap.getOrDefault("advancements." + AdvID.replace("/", ".") + ".title",
@@ -50,17 +102,17 @@ public class LangLoader {
 	public String GetAdvancement_Disc(String AdvID) {
 		return LangMap.getOrDefault("advancements." + AdvID.replace("/", ".") + ".description", "Translation error");
 	}
-	
+
 	public String GetAdvancement_Root_title(String type) {
-		return LangMap.getOrDefault("advancements." + type+ ".root.title", "Translation error");
+		return LangMap.getOrDefault("advancements." + type + ".root.title", "Translation error");
 	}
-	
+
 	public String GetAdvancement_Root_Disc(String type) {
-		return LangMap.getOrDefault("advancements." + type+ ".root.description", "Translation error");
+		return LangMap.getOrDefault("advancements." + type + ".root.description", "Translation error");
 	}
-	
+
 	public String GetAdvancement_toast() {
-		return LangMap.getOrDefault("advancements.toast.task","Advancement Made!");
+		return LangMap.getOrDefault("advancements.toast.task", "Advancement Made!");
 	}
 
 	public String GetDM_title(String DMID, boolean Checkplr, boolean item) {
@@ -69,23 +121,23 @@ public class LangLoader {
 			if (F != null)
 				return F;
 		}
-		
+
 		if (item) {
 			String F = LangMap.get(DMID.toLowerCase() + ".item");
 			if (F != null)
 				return F;
 		}
-		
+
 		if (Checkplr) {
 			String F = LangMap.get(DMID.toLowerCase() + ".player");
 			if (F != null)
 				return F;
 		}
-		return LangMap.getOrDefault( DMID, DMID);
+		return LangMap.getOrDefault(DMID, DMID);
 	}
 
 	public String GetEntity(String type) {
-		return LangMap.getOrDefault( type.toLowerCase(), type);
+		return LangMap.getOrDefault(type.toLowerCase(), type);
 	}
 
 	public String StringJoinText() {
@@ -109,38 +161,17 @@ public class LangLoader {
 	public String StringadvancementtaskText() {
 		return LangMap.getOrDefault("chat.type.advancement.task", "%s has made the advancement %s");
 	}
-	@Deprecated
-	public String JDAHelpText(String com, String DefaultHelpText) {
-		return LangMap.getOrDefault("disbun.com." + com + ".helptext", DefaultHelpText);
-	}
-	@Deprecated
-	public String JDAcomText(String com) {
-		return LangMap.getOrDefault("disbun.com." + com + ".com", com);
-	}
 
-	// command.failed
-	@Deprecated
-	public String JDAFail() {
-		return LangMap.getOrDefault("command.failed", "An unexpected error occurred trying to execute that command");
-	}
-	@Deprecated
-	public String JDASuccess() {
-		return LangMap.getOrDefault("disbun.success", "Success");
-	}
-	@Deprecated
-	public String JDAhelp() {
-		return LangMap.getOrDefault("options.title", "Options");
-	}
-	
 	public String EnchantmentName(String Enchantment) {
 		return LangMap.getOrDefault("enchantment.minecraft." + Enchantment, Enchantment);
 	}
+
 	public String EnchantmentLevel(int Enchlv) {
-		return LangMap.getOrDefault("enchantment.level." + Enchlv, ""+Enchlv);
+		return LangMap.getOrDefault("enchantment.level." + Enchlv, "" + Enchlv);
 	}
-	
+
 	public String GetGameOver() {
-		return LangMap.getOrDefault("deathScreen.title.hardcore","Game over!");
+		return LangMap.getOrDefault("deathScreen.title.hardcore", "Game over!");
 	}
 }
 //"chat.type.advancement.task": "%s has made the advancement %s"

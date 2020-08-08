@@ -63,9 +63,8 @@ public class DeathMessageHandler extends DisBunModule {
 	}
 
 	private void Display(DeathMessage base, ServerInfo serv) {
-
 		if (enabled) {
-			String BaseStr = BPlugin.Langsys.GetDM_title(base.DeathMsg, (base.Attacker != null && base.MobName != null),
+			String BaseStr = BPlugin.Langsys.GetDM_title(base.DeathMsg, (base.Attacker != null || base.MobName != null),
 					(base.Weapon != null));
 			if (LastHash == base.hashCode()) {
 				Debug.err("Running the same message twice? This ain't right...");
@@ -106,7 +105,7 @@ public class DeathMessageHandler extends DisBunModule {
 			String ICON = (Vic == null ? "https://crafatar.com/avatars/" + base.Victem.toString()
 					: Vic.getUser().getAvatarUrl());
 			Color Clr = new Color(0, 127, 255);
-			
+
 			String Weapon = base.Weapon == null ? "Translation error" : base.Weapon;
 			vicName = MarkdownSanitizer.escape(vicName);
 			BaseStr = MarkdownSanitizer.escape(BaseStr);
