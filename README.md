@@ -38,7 +38,7 @@ This relies on a new feature in 1.16 to function properly. That being said, noth
 You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun" file and edit the plugin config accordingly. 
 
 <h3>Customizable command text(WIP)</h3>
-By customizing "plugins/DisBun/discord_config.txt". You can now, to a degree, customize the command and help text a command uses. Certain commands also have further customizable text that's accessible via the "plugins/DisBun/discord_config.txt" text file.   
+By customizing "plugins/DisBun/discord_config.txt". You can now, to a degree, customize the command and help text a set discord command uses (Please avoid adding spaces). Certain commands also have further customizable text that's accessible via the "plugins/DisBun/discord_config.txt" text file.
 
 <h3>If you're lost</h3> 
 Use !help in the same discord server your bot is in. </br> 
