@@ -35,7 +35,7 @@ If you're running a version of Spigot older then 1.12, please ignore the error g
 This relies on a new feature in 1.16 to function properly. That being said, nothing stops you from using it anyway.</br>
 
 <h3>Death Messages (0.0.10 update) </h3>
-The new update will fix some oversights with regards to explosives in the Death Messages module. In 0.0.9 Creepers and TNT are handled incorrectly. However, it appears there are some API anomalies with regards to handling TNT in versions of Minecraft older then 1.12. This is a known issue and doesn't appear fixable.   
+The new update will fix some oversights with regards to explosives in the Death Message module. In 0.0.9 Creepers and TNT are handled incorrectly. However, it appears there are some API anomalies with regards to handling TNT in versions of Minecraft older then 1.12. This is a known issue and doesn't appear fixable.   
 
 <h3>Translation settings</h3>
 <h4>Pre 0.0.10</h4>
