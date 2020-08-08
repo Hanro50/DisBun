@@ -35,7 +35,10 @@ If you're running a version of Spigot older then 1.12, please ignore the error g
 This relies on a new feature in 1.16 to function properly. That being said, nothing stops you from using it anyway.</br>
 
 <h3>Translation settings</h3>
+<h4>Pre 0.0.10</h4>
 You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun" file and edit the plugin config accordingly. 
+<h4>Post 0.0.10</h4>
+You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun/lang" file and edit the plugin config accordingly. 
 
 <h3>Customizable command text(WIP)</h3>
 By customizing "plugins/DisBun/discord_config.txt". You can now, to a degree, customize the command and help text a set discord command uses (Please avoid adding spaces). Certain commands also have further customizable text that's accessible via the "plugins/DisBun/discord_config.txt" text file.
