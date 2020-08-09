@@ -34,13 +34,10 @@ If you're running a version of Spigot older then 1.12, please ignore the error g
 <h3>Discord role colour in versions of Minecraft older then 1.16</h3>
 This relies on a new feature in 1.16 to function properly. That being said, nothing stops you from using it anyway.</br>
 
-<h3>Death Messages (0.0.10 update) </h3>
-The new update will fix some oversights with regards to explosives in the Death Message module. In 0.0.9 Creepers and TNT are handled incorrectly. However, it appears there are some API anomalies with regards to handling TNT in versions of Minecraft older then 1.12. This is a known issue and doesn't appear fixable.   
+<h3>Death Messages in older versions of minecraft </h3>
+The DeathMessage module is coded with 1.16 in mind. This means older versions of the game, especially versions older then 1.12, can be hit or miss with whether the message shown ingame and the message shown by the bot in discord will match exactly. 
 
 <h3>Translation settings</h3>
-<h4>Pre 0.0.10</h4>
-You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun" file and edit the plugin config accordingly. 
-<h4>Post 0.0.10</h4>
 You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun/lang" file and edit the plugin config accordingly. 
 
 <h3>Customizable command text(WIP)</h3>
