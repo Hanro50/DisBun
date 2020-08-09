@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -44,28 +46,42 @@ public class DeathMessageListener implements Listener {
 			EntityDamageByEntityEvent LastD = (EntityDamageByEntityEvent) e.getEntity().getLastDamageCause();
 			String Weapon = null;
 			Entity Damager = LastD.getDamager();
-
+			String DeathMessage = NameSpaceMappings.DMTranslate(LastD.getCause());
+			String Mob = null;
 			// TNT is annoying
 			if (Damager instanceof TNTPrimed) {
 				Damager = ((TNTPrimed) Damager).getSource();
-			}
-
-			if (Damager instanceof Projectile) {
-				ProjectileSource shooter = ((org.bukkit.entity.Projectile) Damager).getShooter();
-				if (shooter instanceof LivingEntity) {
-					Damager = (LivingEntity) shooter;
+			} else if (Damager instanceof Projectile) {
+				ProjectileSource shooter = ((Projectile) Damager).getShooter();
+				if (shooter instanceof Entity) {
+					Damager = (Entity) shooter;
 				} else {
 					Debug.out(shooter.toString());
 				}
-			}
-			String Mob = null;
-			//TNT can sometimes do weird stuff
-			if (Damager != null) {
+			} else if (Damager instanceof FallingBlock) {
+				// death.attack.anvil
+				FallingBlock block = (FallingBlock) Damager;
 				try {
-					Mob = "entity.minecraft." + LastD.getDamager().getType().getKey().getKey();
+					if (block.getBlockData().getMaterial() == Material.ANVIL) {
+						DeathMessage = "death.attack.anvil";
+					}
 				} catch (NoSuchMethodError e1) {
 					@SuppressWarnings("deprecation")
-					String mobT = "entity.minecraft." + LastD.getDamager().getType().getName();
+					Material f = block.getMaterial();
+					if (f == Material.ANVIL) {
+						DeathMessage = "death.attack.anvil";
+					}
+				}
+				Damager = null;
+			}
+
+			// TNT can sometimes do weird stuff
+			if (Damager != null) {
+				try {
+					Mob = "entity.minecraft." + Damager.getType().getKey().getKey();
+				} catch (NoSuchMethodError e1) {
+					@SuppressWarnings("deprecation")
+					String mobT = "entity.minecraft." + Damager.getType().getName();
 					Mob = mobT;
 				}
 
@@ -109,8 +125,8 @@ public class DeathMessageListener implements Listener {
 				}
 			}
 
-			A = new DeathMessage(DP, NameSpaceMappings.DMTranslate(LastD.getCause()), Mob, e.getEntity().getUniqueId(),
-					player, XPLoast, Weapon, Enchantments);
+			A = new DeathMessage(DP, DeathMessage, Mob, e.getEntity().getUniqueId(), player, XPLoast, Weapon,
+					Enchantments);
 			Debug.rep("DC:" + LastD.getCause().name());
 			if (DP != null)
 				Debug.rep("DP:" + DP.tostring());
@@ -141,6 +157,5 @@ public class DeathMessageListener implements Listener {
 			out.writeUTF(A.encode());
 			e.getEntity().sendPluginMessage(SPlugin.self, Channels.Main, out.toByteArray());
 		}
-
 	}
 }

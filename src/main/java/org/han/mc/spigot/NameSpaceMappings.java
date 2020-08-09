@@ -113,7 +113,7 @@ public class NameSpaceMappings {
 		case FALL: // FALL("death.attack.fall"),
 			return "death.attack.fall";
 		case FALLING_BLOCK: // FALLING_BLOCK("death.attack.fallingBlock"),
-			return "death.attack.anvil";
+			return "death.attack.fallingBlock"; //"death.attack.anvil"
 		case FIRE: // FIRE("death.attack.inFire"),
 			return "death.attack.inFire";
 		case FIRE_TICK: // FIRE_TICK("death.attack.onFire"),

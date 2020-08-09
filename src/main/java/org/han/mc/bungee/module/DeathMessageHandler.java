@@ -117,9 +117,10 @@ public class DeathMessageHandler extends DisBunModule {
 			if (Loader.ChkBool(self, VictemDetails)) {
 				Disc = Disc + String.format("**[_%s_]** \n```", vicName);
 				if (base.XP > 0) {
-					Disc = Disc + String.format("\tEXP: %.2f", base.XP);
+					Disc = Disc + "\n\t"
+							+ (String.format(BPlugin.Langsys.EXPString(), "", String.format("%.2f", base.XP))).trim();
 				}
-				Disc = Disc + "\n\tPOS:" + String.format("(x:%.2f,y:%.2f,z:%.2f)", base.Deathpos.x(), base.Deathpos.y(),
+				Disc = Disc + "\n\tXYZ:" + String.format("(x:%.2f,y:%.2f,z:%.2f)", base.Deathpos.x(), base.Deathpos.y(),
 						base.Deathpos.z());
 				Disc = Disc + "```\n";
 			}

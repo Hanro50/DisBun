@@ -7,6 +7,7 @@ import org.han.bot.BotCon;
 import org.han.link.GetDetails;
 import org.han.link.LinkUp;
 import org.han.link.TextMsg;
+import org.han.xlib.Debug;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -27,28 +28,30 @@ public class JoinMessages {
 				Member M = null;
 				MessageEmbed E;
 				// TODO Auto-generated method stub
-				if (ID != null) {
-					M = GetDetails.getGuild().retrieveMemberById(ID, true).complete();
-				}
-
-				if (M == null) {
-					E = new EmbedBuilder().setAuthor(String.format(Message, playerName), null,
-							"https://crafatar.com/avatars/" + playerID).setColor(color).build();
-
-				} else {
-					E = new EmbedBuilder()
-							.setAuthor(String.format(Message, M.getEffectiveName()), null, M.getUser().getAvatarUrl())
-							.setColor(color).build();
-				}
-
-				TextMsg.GetChn(ServName).forEach(f -> {
-					TextChannel CHL = BotCon.getJDA().getTextChannelById(f);
-					if (CHL != null) {
-						CHL.sendMessage(E).queue();
+				try {
+					if (ID != null) {
+						M = GetDetails.getGuild().retrieveMemberById(ID, true).complete();
 					}
-				});
-			}
 
+					if (M == null) {
+						E = new EmbedBuilder().setAuthor(String.format(Message, playerName), null,
+								"https://crafatar.com/avatars/" + playerID).setColor(color).build();
+
+					} else {
+						E = new EmbedBuilder().setAuthor(String.format(Message, M.getEffectiveName()), null,
+								M.getUser().getAvatarUrl()).setColor(color).build();
+					}
+
+					TextMsg.GetChn(ServName).forEach(f -> {
+						TextChannel CHL = BotCon.getJDA().getTextChannelById(f);
+						if (CHL != null) {
+							CHL.sendMessage(E).queue();
+						}
+					});
+				} catch (IllegalStateException e) {
+					Debug.wrn("JDA is not running yet");
+				}
+			}
 		});
 
 		// CHL.sendMessage(E).queue();

@@ -32,12 +32,17 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 public class Events implements Listener {
 	TextMsg T = new JDAIN();
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onServerConnectEvent(ServerConnectEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		ProxiedPlayer player = event.getPlayer();
 		if ((LinkUp.isforcedlink(event.getTarget().getName())) && LinkUp.GetDiscordID(player.getUniqueId()) == null) {
 			if (event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
@@ -58,7 +63,7 @@ public class Events implements Listener {
 		if (!event.isCancelled()) {
 			if (event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
 				JoinMessages.networkjoin(event.getTarget(), player);
-			} else if (!event.isCancelled()) {
+			} else if (event.getReason() == ServerConnectEvent.Reason.COMMAND) {
 				JoinMessages.serverjoin(event.getTarget(), player);
 			}
 			if (PermCalc.self != null) {

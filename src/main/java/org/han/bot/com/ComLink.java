@@ -16,10 +16,11 @@ import org.han.xlib.FileObj;
 public class ComLink extends AbsConfig {
 	static ComLink Self;
 	final static String Version = "Version";
-	public final static String Langcom = ".com";
-	public final static String helptxt = ".helptxt";
+	public final static String Langcom = "com";
+	public final static String helptxt = "helptxt";
 	public final static String Success = "print.success";
 	public final static String Error = "print.error";
+	public final static String Enable = "enable";
 
 	public static String getsuccess() {
 		if (Self != null)
@@ -29,7 +30,7 @@ public class ComLink extends AbsConfig {
 
 	public static String geterror() {
 		if (Self != null)
-			return Self.get(Success);
+			return Self.get(Error);
 		return " %U Error";
 	}
 
@@ -45,7 +46,7 @@ public class ComLink extends AbsConfig {
 		Register("Error text ( %U Will be replaced with a user mention)", Error, " %U Error");
 
 		Coms.keySet().forEach(f -> {
-			Register("Enable the " + f + " command", f + ".enable", "true");
+			Register("Enable the " + f + " command", f +"."+ Enable, "true");
 			Register("Chang the command for the " + f + " command", f + Langcom, Coms.get(f).getCom());
 			Register("Chang the helptext for the " + f + " command", f + helptxt, Coms.get(f).Help());
 			Coms.get(f).Adcon(this);
@@ -113,7 +114,7 @@ public class ComLink extends AbsConfig {
 	}
 
 	public static boolean iSEnable(String com) {
-		return Self.boolcheck("com." + com);
+		return Self.boolcheck( com+"."+Enable);
 	}
 
 	public static void DoCom(Msg m) {
@@ -121,7 +122,6 @@ public class ComLink extends AbsConfig {
 			return;
 		String com = Self.remap.get(m.getCom());
 		if (Coms.containsKey(com)) {
-
 			if (!iSEnable(m.getCom())) {
 				Print.Err(m, "This command has been disabled by the operator");
 				return;

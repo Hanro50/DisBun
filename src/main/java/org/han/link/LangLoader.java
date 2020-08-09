@@ -173,5 +173,9 @@ public class LangLoader {
 	public String GetGameOver() {
 		return LangMap.getOrDefault("deathScreen.title.hardcore", "Game over!");
 	}
+	
+	public String EXPString() {
+		return LangMap.getOrDefault("commands.experience.query.levels", "%s has %s experience levels");
+	}
 }
 //"chat.type.advancement.task": "%s has made the advancement %s"

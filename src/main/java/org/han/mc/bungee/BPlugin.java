@@ -69,7 +69,7 @@ public class BPlugin extends Plugin {
 	}
 
 	public static void reloadConfig() {
-		Debug.out("Loading:");
+		Debug.out("Loading...");
 		Config = new BConfig();
 		Config.UpdateCheck();
 		Debug.Debug = Config.DebugMode();

@@ -27,9 +27,19 @@ public class BotCon {
 		return jda.getStatus().equals(Status.CONNECTED);
 	}
 
-	public static JDA getJDA() {
-		if (isRunning()) {
-			return jda;
+	/**
+	 * Get the active JDA instance @return The JDA instance @throws
+	 * IllegalStateException if the JDA instance is not running @throws
+	 */
+
+	public static JDA getJDA() throws IllegalStateException {
+		try {
+			if (isRunning()) {
+				jda.awaitReady();
+				return jda;
+			}
+		} catch (InterruptedException e) {
+			Trace(e);
 		}
 		throw new IllegalStateException("Bot is not currently running");
 	}
@@ -58,6 +68,7 @@ public class BotCon {
 
 		try {
 			JDA prep = JDABuilder.createDefault(Token).addEventListeners(new JDAListener()).build();
+			Running = true;
 			out("Starting bot");
 			// out("Can't redirect JDA errors. Just ignore JDA's complaining");
 			do {
@@ -77,9 +88,9 @@ public class BotCon {
 			}
 			out(prep.getSelfUser().getName() + " has been started\n");
 			jda = prep;
-			Running = true;
 
 		} catch (LoginException | IllegalArgumentException e) {
+			Running = false;
 			err("INVALID DISCORD TOKEN");
 			err("Please update Token in config options");
 			err("and then reload (/dbreload)");
