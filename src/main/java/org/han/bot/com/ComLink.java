@@ -1,7 +1,6 @@
 package org.han.bot.com;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,8 +15,6 @@ import org.han.xlib.FileObj;
 public class ComLink extends AbsConfig {
 	static ComLink Self;
 	final static String Version = "Version";
-	public final static String Langcom = "com";
-	public final static String helptxt = "helptxt";
 	public final static String Success = "print.success";
 	public final static String Error = "print.error";
 	public final static String Enable = "enable";
@@ -47,10 +44,7 @@ public class ComLink extends AbsConfig {
 
 		Coms.keySet().forEach(f -> {
 			Register("Enable the " + f + " command", f +"."+ Enable, "true");
-			Register("Chang the command for the " + f + " command", f + Langcom, Coms.get(f).getCom());
-			Register("Chang the helptext for the " + f + " command", f + helptxt, Coms.get(f).Help());
 			Coms.get(f).Adcon(this);
-			remap.put(get(f + Langcom), f);
 		});
 
 	}
@@ -97,8 +91,6 @@ public class ComLink extends AbsConfig {
 		return Coms;
 	}
 
-	private Map<String, String> remap = new HashMap<String, String>();
-
 	public static void RegCom(ComObj Com) {
 		String com = Com.getCom().trim().toLowerCase();
 		if (Coms.containsKey(com)) {
@@ -120,7 +112,7 @@ public class ComLink extends AbsConfig {
 	public static void DoCom(Msg m) {
 		if (!m.isCom())
 			return;
-		String com = Self.remap.get(m.getCom());
+		String com =m.getCom();
 		if (Coms.containsKey(com)) {
 			if (!iSEnable(m.getCom())) {
 				Print.Err(m, "This command has been disabled by the operator");

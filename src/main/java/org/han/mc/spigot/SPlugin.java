@@ -12,6 +12,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.han.link.Channels;
+import org.han.link.LogDebug;
 import org.han.mc.spigot.listeners.Advancementlistener;
 import org.han.mc.spigot.listeners.DeathMessageListener;
 import org.han.mc.spigot.module.PlaceHolderapiClientSide;
@@ -36,13 +37,13 @@ public class SPlugin extends JavaPlugin implements PluginMessageListener {
 		FileObj.FileChkroot(this.getFile().getAbsolutePath());
 		FileObj.ClassPath = this.getDataFolder().getAbsolutePath() + "/";
 		FileObj.FileChk("");
-
+		Debug.boot(new LogDebug(getLogger()),true);
 		// FileObj.Init(this.getFile().getAbsoluteFile());
-		Debug.Override = getLogger();
+		//Debug.Override = getLogger();
 		FileObj.FileChkroot("");
 		FileObj.FileChk("");
 		Config = new SConfig();
-		Debug.Debug = Config.DebugMode();
+		Debug.Debugmode = Config.DebugMode();
 		getLogger().info("Starting Spigot Component of DBcon");
 		checkIfBungee();
 		if (!getServer().getPluginManager().isPluginEnabled(this))

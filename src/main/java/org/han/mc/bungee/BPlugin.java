@@ -11,6 +11,7 @@ import org.han.link.Channels;
 import org.han.link.LangLoader;
 import org.han.link.LinkPrep;
 import org.han.link.LinkUp;
+import org.han.link.LogDebug;
 import org.han.link.TextMsg;
 import org.han.mc.bungee.com.*;
 import org.han.xlib.Debug;
@@ -32,7 +33,7 @@ public class BPlugin extends Plugin {
 
 	public static void main(String[] w) {
 		FileObj.Init();
-		Debug.boot(w);
+	//	Debug.boot(w);
 		//DeathMessage D =new DeathMessage(new vector3<Double>(5D, 5D, 5D));
 		//Debug.out(D.encode());
 		//Debug.out(DeathMessage.decode(D.encode()).deathpos.tostring());
@@ -72,7 +73,7 @@ public class BPlugin extends Plugin {
 		Debug.out("Loading...");
 		Config = new BConfig();
 		Config.UpdateCheck();
-		Debug.Debug = Config.DebugMode();
+		Debug.Debugmode = Config.DebugMode();
 		 Langsys = LangLoader.Load(); 
 		// ServConfig = new BServerConfig(getproxyserv().getServers().keySet());
 		loader = new ModuleLoader();
@@ -125,7 +126,7 @@ public class BPlugin extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, new Reloadcom());
 		getProxy().getPluginManager().registerCommand(this, new InfoCom());
 		FileObj.Init(getProxy().getPluginsFolder(), getDataFolder().getName());
-		Debug.Override = getLogger();
+		Debug.boot(new LogDebug(getLogger()),true);
 		Debug.out("Plugin File : " + FileObj.ClassPath);
 
 	}

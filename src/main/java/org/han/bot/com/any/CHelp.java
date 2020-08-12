@@ -46,8 +46,7 @@ public class CHelp extends ComObj {
 				ComObj comobj = ComLink.GetComMap().get(key);
 
 				if ((all || (comobj.permlv.chk(m) && (comobj.visible.chk(m)))) && comobj.place.chk(m)) {
-					res = res + String.format("%-12s", Handler.ChkStr(ComLink.GetComMap().get(key), ComLink.Langcom))
-							+ " : " + Handler.ChkStr(ComLink.GetComMap().get(key), ComLink.helptxt) + "\n";
+					res = res + String.format("%-12s", key) + " : " + ComLink.GetComMap().get(key).Help() + "\n";
 				}
 			}
 		}

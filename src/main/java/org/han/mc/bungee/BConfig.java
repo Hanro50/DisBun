@@ -114,7 +114,7 @@ public class BConfig extends AbsConfig {
 		Register("Should this plugin use an external lang file (if a bungee update breaks this part of the plugin. This is a potential fix)",
 				UseExtLang, "false");
 		Register( "external language file(put this file in the plugin config file)", ExtLang,
-				"af.json");
+				"en_us.json");
 
 	}
 	public boolean UseExtLang() {
