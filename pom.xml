@@ -4,13 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.han</groupId>
 	<artifactId>DisBun</artifactId>
-	<version>0.0.10-SNAPSHOT</version>
-	<properties>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+	<version>0.0.11-SNAPSHOT</version>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 	<repositories>
 		<repository>
 			<name>jcenter</name>
