@@ -41,7 +41,7 @@ The DeathMessage module is coded with 1.16 in mind. This means older versions of
 You are free to use any minecraft language file with this plugin. Simple put the language json file in the DisBun file within your "plugins/DisBun/lang" file and edit the plugin config accordingly. 
 
 <h3>Customizable command text(WIP)</h3>
-By customizing "plugins/DisBun/discord_config.txt". You can now, to a degree, customize the command and help text a set discord command uses (Please avoid adding spaces). Certain commands also have further customizable text that's accessible via the "plugins/DisBun/discord_config.txt" text file.
+This has proven too unstable and has been removed in version 0.0.11.
 
 <h3>If you're lost</h3> 
 Use !help in the same discord server your bot is in. </br> 
